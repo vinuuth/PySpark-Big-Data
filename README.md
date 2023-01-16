@@ -1,6 +1,8 @@
 # Vinutha Bengaluru Prabhudev
 
-![My Passion1](./Images/MyPassion2.png "My Passion1") ![travel](./Images/travel.jpg "travel")
+![My Passion1](./Images/MyPassion1.png "My Passion1") 
+
+![travel](./Images/travel.jpg "travel")
 
 ## Where are you from?
 I am from India, (Karnataka state, Bengaluru city)
