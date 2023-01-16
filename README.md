@@ -13,4 +13,4 @@ I am from India, (Karnataka state, Bengaluru city)
 ## IT Interests
 I really enjoy  managing IT projects and web development. I worked as an application development associate at Accenture, under the DevOps team using the Salesforce CRM and Flowsum tool.
 ## Something Interesting About You
-I good at dancing, especially modern and classical Indian dance.
+I good at dancing, especially modern and classical Indian dance forms.
