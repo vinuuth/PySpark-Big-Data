@@ -1,6 +1,6 @@
 # Vinutha Bengaluru Prabhudev
 
-![My Passion](./images/passion.png "My Passion")
+![My Passion](./Images/passion.png "My Passion")
 
 
 
