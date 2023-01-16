@@ -1,8 +1,6 @@
 # Vinutha Bengaluru Prabhudev
 
-![My Passion](./Images/passion.png "My Passion")
-
-
+![My Passion](./Images/MyPassion.png "My Passion")
 
 
 ## Where are you from?
