@@ -1,7 +1,6 @@
 # Vinutha Bengaluru Prabhudev
 
-![My Passion](./Images/MyPassion.png "My Passion")
-
+![My Passion1](./Images/MyPassion2.png "My Passion1") ![travel](./Images/travel.jpg "travel")
 
 ## Where are you from?
 I am from India, (Karnataka state, Bengaluru city)
@@ -11,4 +10,4 @@ I am from India, (Karnataka state, Bengaluru city)
 ## IT Interests
 I really enjoy  managing IT projects and web development. I worked as an application development associate at Accenture, under the DevOps team using the Salesforce CRM and Flowsum tool.
 ## Something Interesting About You
-I good at dancing, especially modern and classical Indian dance forms.
+I am good at dancing, especially modern and classical Indian dance forms. I love adventures.
