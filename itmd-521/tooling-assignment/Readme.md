@@ -133,8 +133,8 @@ git config --global user.email "<youremail@example.com>"
 My information would look like this:
 
 ```bash
-git config --global user.name "Jeremy Hajek"
-git config --global user.email "hajek@iit.edu"
+git config --global user.name "Vinnuth"
+git config --global user.email "vinuthabp1@gmail.com"
 ```
 
 ### Install VirtualBox or Parallels
@@ -178,6 +178,35 @@ Download the proper [Oh My Git! tutorial](https://ohmygit.org/ "webpage for oh m
 Complete the tutorial and take screenshots of the completed sections (may need to take a few shots as the there are many sections).
 
 This Git tutorial is a good refresher for those who need it and a great introduction for those new to Version Control and need to learn it.
+
+![allssgame](./images/allssgame.png "allssgame")
+
+
+![bisectgame](./images/bisectgame.png "bisectgame")
+
+![branchsgame](./images/branchesgame.png "branchesgame")
+
+![changingame](./images/changingame.png "changingame")
+
+![filegame](./images/filegame.png "filegame")
+
+![indexgame](./images/indexgame.png "indexgame")
+
+![introgame](./images/introgame.png "introgame")
+
+![mergame](./images/mergame.png "mergame")
+
+![remotegame](./images/remotegame.png "remotegame")
+
+![shitgame](./images/shitgame.png "shitgame")
+
+![stashgame](./images/stashgame.png "stashgame")
+
+![tagsgame](./images/tagsgame.png "tagsgame")
+
+![workflows](./images/workflows.png "workflows")
+
+
 
 ## Tooling Assignment Part II
 
