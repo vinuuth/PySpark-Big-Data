@@ -5,6 +5,7 @@ Provide the required screenshots to show that tooling has been properly installe
 ## Hostname Change
 
 Image goes here
+
 ![hostname](./images/hostname.png "hostname")
 
 ## WebServer Install
@@ -28,7 +29,9 @@ Execute command: `pyspark` and `spark-shell` and take screenshots of each.
 ## R Version
 
 Execute command: `R -v`
+
 ![rversion](./images/rversion.png "rversion")
+
 ## Python Version
 
 Execute command: `python -V`
