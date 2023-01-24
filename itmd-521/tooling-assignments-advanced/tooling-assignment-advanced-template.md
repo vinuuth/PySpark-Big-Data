@@ -32,7 +32,9 @@ Execute command: `R -v`
 ## Python Version
 
 Execute command: `python -V`
+
 ![python3](./images/python3.png "python3")
+
 ## Result of Cloning Your Private Repository
 
 No need to show the clone action -- just the results of the `ls` command
