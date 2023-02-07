@@ -19,7 +19,7 @@ if __name__ =="_main_":
     .sum("Count")
     .orderBy("sum(Count)", ascending=False))
 
-    column_mnm_df.show(n=60, truncate=False)
+    count_mnm_df.show(n=60, truncate=False)
     print("Total Rows = %d " %(count_mnm_df.count()))
 
     ca_count_mnm_df = (mnm_df
