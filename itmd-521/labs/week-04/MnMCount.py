@@ -20,7 +20,7 @@ if __name__ =="_main_":
     .orderBy("sum(Count)", ascending=False))
 
     count_mnm_df.show(n=60, truncate=False)
-    print("Total Rows = %d " %(count_mnm_df.count()))
+    print("Total Rows = %d " % (count_mnm_df.count()))
 
     ca_count_mnm_df = (mnm_df
         .select("State","Color","Count")
@@ -30,7 +30,7 @@ if __name__ =="_main_":
         .orderBy("sum(Count)", ascending = False))
 
 
-    ca_count-mnm_df.show(n=10, truncate=Falsespark)
+    ca_count-mnm_df.show(n=10, truncate=False)
     spark.stop()
 
 
