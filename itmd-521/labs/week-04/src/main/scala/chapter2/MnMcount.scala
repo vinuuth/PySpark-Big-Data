@@ -18,13 +18,13 @@ object MnMcount {
 
         val mnmFile = args(0)
         val mnmDF = spark.read.format("csv")
-         .option("header","true")
-         .option("inferSchema","true")
+         .option("header", "true")
+         .option("inferSchema", "true")
          .load(mnmFile)
-        mnmDF.show(5,false)
+        mnmDF.show(5, false)
 
-        val countMnMDf = mnmDF.select("State","Color","Count")
-            .groupBy("State","Colour")
+        val countMnMDf = mnmDF.select("State", "Color", "Count")
+            .groupBy("State", "Colour")
             .sum("Count")
             .orderBy(desc("sum(Count)"))
         
@@ -34,11 +34,12 @@ object MnMcount {
 
         val caCountMnMDF = mnmDF.select("*")
          .where(col("State") === "CA")
-         .groupBy("State","Color")
+         .groupBy("State", "Color")
          .sum("Count")
          .orderBy(desc("sum(count)"))
 
         caCountMnMDF.show(10)
+        spark.stop()
 
     }
 }
