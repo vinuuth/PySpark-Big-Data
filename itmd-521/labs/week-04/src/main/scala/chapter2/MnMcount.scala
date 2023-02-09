@@ -32,13 +32,13 @@ object MnMcount {
         println(s"Total Rows = ${countMnMDF.count()}")
         println()
 
-        val caCountMnNDF = mnmDF.select("*")
+        val caCountMnMDF = mnmDF.select("*")
          .where(col("State") === "CA")
          .groupBy("State","Color")
          .sum("Count")
          .orderBy(desc("sum(count)"))
 
-        caCountMnNDF.show(10)
+        caCountMnMDF.show(10)
 
     }
 }
