@@ -44,5 +44,7 @@ object MnMcount {
 
 
     caCountMnNDF.show(10)
+    
+    spark.stop()
   }
 }
