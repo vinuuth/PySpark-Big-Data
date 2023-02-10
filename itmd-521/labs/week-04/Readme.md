@@ -36,17 +36,20 @@ Make sure the `vagrant@your-initials` is in the screenshot
 
 
 ![pysparkss](./images/pysparkss.png "pysparkss") 
+![pyspa](./images/pyspa.png "pyspa")
 
 
 ### SBT build Output Screenshot
 
 
 ![sbtbuild.png](./images/sbtbuild.png "sbtbuild") 
+![sbtsuccess](./images/sbtsuccess.png "sbtsuccess")
 
 ### Spark Scala ScreenShot
 
 
 ![scala](./images/scala.png "scala") 
+![scalaexec](./images/scalaexec.png "scalaexec")
 
 ## Deliverables
 
