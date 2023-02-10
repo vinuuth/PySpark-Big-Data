@@ -6,8 +6,7 @@ import org.apache.spark.sql.functions._
 object MnMcount {
   def main(args: Array[String]) {
     val spark = SparkSession
-      .builder
-      .appName("MnMCount")
+      .builder.appName("MnMCount")
       .getOrCreate()
 
     if (args.length < 1) {
