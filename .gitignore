@@ -1,4 +1,8 @@
 #packer
+*.csv
+*.txt
+*.json
+target/
 *.vdi
 *.box
 .vagrant/
