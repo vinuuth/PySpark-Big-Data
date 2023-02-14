@@ -1,9 +1,9 @@
 #packer
-*.csv
-*.txt
-*.json
-target/
-.DS_Store
+#*.csv
+#*.txt
+#*.json
+#target/
+#.DS_Store
 *.vdi
 *.box
 .vagrant/
