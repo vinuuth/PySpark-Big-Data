@@ -46,7 +46,6 @@ Add the required screenshots here:
 ### Screenshot of the printSchema inferred in Python
 
 ![inferpy](./images/inferpy.png "inferpy") 
-Screenshot goes here
 
 ### Screenshot of the printSchema programmatically in Python
 
