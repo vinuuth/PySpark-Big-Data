@@ -42,7 +42,6 @@ object week05 {
 
     divy_df.show()
 
-    #print schema
 
     print(divy_df.printSchema())
     print(divy_df.schema)
