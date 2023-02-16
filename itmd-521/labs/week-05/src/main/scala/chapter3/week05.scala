@@ -25,7 +25,7 @@ object week05 {
     println(s"Total Rows = ${div_df.count()}")
 
 
-   val divschema =  StructType([StructField("trip_id", IntegerType, True),
+   val divschema =  StructType(Array(StructField("trip_id", IntegerType, True),
                  StructField("starttime", StringType, True),
                  StructField("stoptime", StringType(), True),
                  StructField("bikeid", IntegerType(), True),
@@ -36,7 +36,7 @@ object week05 {
                  StructField("to_station_name", StringType(), True),
                  StructField("usertype", StringType(), True),
                  StructField("gender", StringType(), True),
-                 StructField("birthyear", IntegerType(), True)])
+                 StructField("birthyear", IntegerType(), True)))
 
     divy_df = spark.read.schema(divschema).csv(div)
 
