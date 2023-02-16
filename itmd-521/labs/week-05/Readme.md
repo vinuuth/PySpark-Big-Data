@@ -45,27 +45,28 @@ Add the required screenshots here:
 
 ### Screenshot of the printSchema inferred in Python
 
+![inferpy](./images/inferpy.png "inferpy") 
 Screenshot goes here
 
 ### Screenshot of the printSchema programmatically in Python
 
-Screenshot goes here
+![structpy](./images/structpy.png "structpy") 
 
 ### Screenshot of the printSchema via DDL in Python
 
-Screenshot goes here
+![ddlpy](./images/ddlpy.png "ddlpy") 
 
 ### Screenshot of the printSchema inferred in Scala
 
-Screenshot goes here
+![inferscala](./images/inferscala.png "inferscala") 
 
 ### Screenshot of the printSchema programmatically in Scala
 
-Screenshot goes here
+![structscala](./images/structscala.png "structscala") 
 
 ### Screenshot of the printSchema via DDL in Scala
 
-Screenshot goes here
+![ddlscala](./images/ddlscala.png "ddlscala") 
 
 ### Deliverable
 
