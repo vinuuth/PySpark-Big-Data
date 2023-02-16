@@ -22,18 +22,18 @@ object week05 {
     println()
 
 
-   val divschema =  StructType(Array(StructField("trip_id", IntegerType, True),
-                 StructField("starttime", StringType, True),
-                 StructField("stoptime", StringType(), True),
-                 StructField("bikeid", IntegerType(), True),
-                 StructField("tripduration", IntegerType(), True),
-                 StructField("from_station_id", IntegerType(), True),
-                 StructField("from_staion_name", StringType(), True),
-                 StructField("to_station_id", IntegerType(), True),
-                 StructField("to_station_name", StringType(), True),
-                 StructField("usertype", StringType(), True),
-                 StructField("gender", StringType(), True),
-                 StructField("birthyear", IntegerType(), True)))
+   val divschema =  StructType(Array(StructField("trip_id", IntegerType, true),
+                 StructField("starttime", StringType, true),
+                 StructField("stoptime", StringType(), true),
+                 StructField("bikeid", IntegerType(), true),
+                 StructField("tripduration", IntegerType(), true),
+                 StructField("from_station_id", IntegerType(), true),
+                 StructField("from_staion_name", StringType(), true),
+                 StructField("to_station_id", IntegerType(), true),
+                 StructField("to_station_name", StringType(), true),
+                 StructField("usertype", StringType(), true),
+                 StructField("gender", StringType(), true),
+                 StructField("birthyear", IntegerType(), true)))
 
     val divy_DF = spark.read.schema(divschema).csv(div)
 
