@@ -36,7 +36,7 @@ object week05 {
                  StructField("to_station_name", StringType(), True),
                  StructField("usertype", StringType(), True),
                  StructField("gender", StringType(), True),
-                 StructField("birthyear", IntegerType(), True)))
+                 StructField("birthyear", IntegerType(), True))g)
 
     divy_df = spark.read.schema(divschema).csv(div)
 
@@ -48,11 +48,11 @@ object week05 {
     print(divy_df.schema)
     println(s"Total Rows = ${divy_df.count()}")
 
-    # DDL Schema
+
 
     ddlschema = "trip_id INT, stattime STRING, stoptime STRING, bikeid INT, tripduration INT, from_station_id INT, from_station_name STRING, to_station_id INT, to_station_name STRING, usertype STRING, gender STRING, birthyear INT"
 
-    ddl_df = spark.read.csv(div, header=True, schema=ddlschema)
+    ddl_df = spark.read.schema(ddlschema).csv(div)
 
     ddl_df.show()
 
