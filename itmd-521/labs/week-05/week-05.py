@@ -7,7 +7,7 @@ if __name__ == "__main__":
         .builder
         .appName("DivyPy")
         .getOrCreate())
-    # get the M&M data set file name
+    # get the data set file name
 
     div = "Divvy_Trips_2015-Q1.csv"
     # read the file into a Spark DataFrame
