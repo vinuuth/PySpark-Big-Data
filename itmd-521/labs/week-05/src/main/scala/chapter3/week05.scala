@@ -1,28 +1,25 @@
 package main.scala.chapter3
-
 import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.functions._
+import org.apache.spark.sql.types._
 
 object week05 {
   def main(args: Array[String]){
-    val spark = (SparkSession
+    val spark = SparkSession
         .builder
-        .appName("DivyPy")
-        .getOrCreate())
-  
-
-
+        .appName("Divyscala")
+        .getOrCreate()
     val div = "Divvy_Trips_2015-Q1.csv"
 
     val div_df = (spark.read.format("csv")
         .option("header", "true")
         .option("inferSchema", "true")
         .load(div))
-    div_df.show()
+    div_df.show(false)
 
     print(div_df.printSchema())
 
     println(s"Total Rows = ${div_df.count()}")
+    println()
 
 
    val divschema =  StructType(Array(StructField("trip_id", IntegerType, True),
@@ -36,11 +33,11 @@ object week05 {
                  StructField("to_station_name", StringType(), True),
                  StructField("usertype", StringType(), True),
                  StructField("gender", StringType(), True),
-                 StructField("birthyear", IntegerType(), True))g)
+                 StructField("birthyear", IntegerType(), True)))
 
-    divy_df = spark.read.schema(divschema).csv(div)
+    val gdivy_df = spark.read.schema(divschema).csv(div)
 
-    divy_df.show()
+    divy_df.show(false)
 
 
     print(divy_df.printSchema())
@@ -49,14 +46,16 @@ object week05 {
 
 
 
-    ddlschema = "trip_id INT, stattime STRING, stoptime STRING, bikeid INT, tripduration INT, from_station_id INT, from_station_name STRING, to_station_id INT, to_station_name STRING, usertype STRING, gender STRING, birthyear INT"
+   val ddlschema = "trip_id INT, stattime STRING, stoptime STRING, bikeid INT, tripduration INT, from_station_id INT, from_station_name STRING, to_station_id INT, to_station_name STRING, usertype STRING, gender STRING, birthyear INT"
 
-    ddl_df = spark.read.schema(ddlschema).csv(div)
+   val ddl_df = spark.read.schema(ddlschema).csv(div)
 
-    ddl_df.show()
+    ddl_df.show(false)
 
     print(ddl_df.printSchema())
     println(s"Total Rows = ${ddl_df.count()}")
+    println()
+
 
     spark.stop()
   }
