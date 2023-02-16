@@ -46,27 +46,30 @@ Add the required screenshots here:
 ### Screenshot of the printSchema inferred in Python
 
 ![inferpy](./images/inferpy.png "inferpy") 
+![countinfer](./images/countinfer.png "countinfer") 
 
 ### Screenshot of the printSchema programmatically in Python
 
 ![structpy](./images/structpy.png "structpy") 
-
+![countstruct](./images/countstruct.png "countstruct") 
 ### Screenshot of the printSchema via DDL in Python
 
 ![ddlpy](./images/ddlpy.png "ddlpy") 
+![countddl](./images/countddl.png "countddl") 
 
 ### Screenshot of the printSchema inferred in Scala
 
 ![inferscala](./images/inferscala.png "inferscala") 
+![countinfer](./images/countinfer.png "countinfer") 
 
 ### Screenshot of the printSchema programmatically in Scala
 
 ![structscala](./images/structscala.png "structscala") 
-
+![countstruct](./images/countstruct.png "countstruct") 
 ### Screenshot of the printSchema via DDL in Scala
 
 ![ddlscala](./images/ddlscala.png "ddlscala") 
-
+![countddl](./images/countddl.png "countddl") 
 ### Deliverable
 
 Submit to Blackboard the URL to the folder in your GitHub repo.  I will clone your code, compile it, and run it to test the functionality. Include your `build.sbt` file as well, but not your build artifacts. 
