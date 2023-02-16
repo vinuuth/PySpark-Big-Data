@@ -9,7 +9,7 @@ if __name__ == "__main__":
         .getOrCreate())
     # get the M&M data set file name
 
-    div = "./python/Divvy_Trips_2015-Q1.csv"
+    div = "Divvy_Trips_2015-Q1.csv"
     # read the file into a Spark DataFrame
     div_df = (spark.read.format("csv")
         .option("header", "true")
@@ -22,18 +22,18 @@ if __name__ == "__main__":
     print("Total rows = %d" % (div_df.count()))
 
 
-    divschema = StructType([structField('trip_id', IntegerType(), True)
-                 structField('starttime', StringType(), True)
-                 structField('stoptime', StringType(), True)
-                 structField('bikeid', IntegerType(), True)
-                 structField('tripduration', IntegerType(), True)
-                 structField('from_station_id', IntegerType(), True)
-                 structField('from_staion_name', StringType(), True)
-                 structField('to_station_id', IntegerType(), True)
-                 structField('to_station_name', StringType(), True)
-                 structField('usertype', StringType(), True)
-                 structField('gender', StringType(), True)
-                 structField('birthyear', IntegerType(), True)])
+    divschema =  StructType([StructField('trip_id', IntegerType(), True),
+                 StructField('starttime', StringType(), True),
+                 StructField('stoptime', StringType(), True),
+                 StructField('bikeid', IntegerType(), True),
+                 StructField('tripduration', IntegerType(), True),
+                 StructField('from_station_id', IntegerType(), True),
+                 StructField('from_staion_name', StringType(), True),
+                 StructField('to_station_id', IntegerType(), True),
+                 StructField('to_station_name', StringType(), True),
+                 StructField('usertype', StringType(), True),
+                 StructField('gender', StringType(), True),
+                 StructField('birthyear', IntegerType(), True)])
 
     # reading csv file
     divy_df = spark.read.csv(div, header=True, schema=divschema)
