@@ -9,7 +9,7 @@ if __name__ == "__main__":
         .getOrCreate())
     # get the M&M data set file name
 
-    div = "Divvy_Trips_2015-Q1.csv"
+    div = "./python/Divvy_Trips_2015-Q1.csv"
     # read the file into a Spark DataFrame
     div_df = (spark.read.format("csv")
         .option("header", "true")
@@ -33,7 +33,7 @@ if __name__ == "__main__":
                  structField('to_station_name', StringType(), True)
                  structField('usertype', StringType(), True)
                  structField('gender', StringType(), True)
-                 structField('birthyear', IntegerType(), True)})
+                 structField('birthyear', IntegerType(), True)])
 
     # reading csv file
     divy_df = spark.read.csv(div, header=True, schema=divschema)
@@ -45,17 +45,17 @@ if __name__ == "__main__":
     #print schema
 
     print(divy_df.printSchema())
-    print ("Total rows = %d" % (div_df.count()))
+    print ("Total rows = %d" % (divy_df.count()))
 
     # DDL Schema
 
     ddlschema = "trip_id INT, stattime STRING, stoptime STRING, bikeid INT, tripduration INT, from_station_id INT, from_station_name STRING, to_station_id INT, to_station_name STRING, usertype STRING, gender STRING, birthyear INT"
 
-    ddl_df = spark.read.csv(div, header=True, schema=divschema)
+    ddl_df = spark.read.csv(div, header=True, schema=ddlschema)
 
     ddl_df.show()
 
     print(ddl_df.printSchema())
-    print ("Total rows = %d" % (div_df.count()))
+    print ("Total rows = %d" % (ddl_df.count()))
 
     spark.stop()
