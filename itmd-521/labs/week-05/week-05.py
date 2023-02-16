@@ -45,6 +45,7 @@ if __name__ == "__main__":
     #print schema
 
     print(divy_df.printSchema())
+    print(divy_df.schema)
     print ("Total rows = %d" % (divy_df.count()))
 
     # DDL Schema
