@@ -1,7 +1,7 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.types import *
 
-from pyspark.sql.functions import *
+#from pyspark.sql.functions import *
 
 
 if __name__ == "__main__":
@@ -67,5 +67,8 @@ print ("Total rows = %d" % (fire_df.count()))
 # .agg(countDistinct("CallType").alias("DistinctCallTypes"))
  #.show())
 
-fire_calls_2018 = fire_df.filter(year(fire_df["CallDate"]) == 2018).show()
+fire_ts_df = sf_fire_file.filter(year('CallDate')=='2018')
+
+fire_ts_df.select("CallType").where(col("CallType").isNotNull()).show()
+
 
