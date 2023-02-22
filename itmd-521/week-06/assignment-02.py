@@ -5,25 +5,18 @@ from pyspark.sql.functions import *
 
 
 if __name__ == "__main__":
+    if len(sys.argv) <= 0:
+        sys.exit(1)
 
     spark = (SparkSession
         .builder
         .appName("SF_Fire")
         .getOrCreate())
+    csvFile = sys.argv[1]
     # get the data set file name
 
-    div = "Divvy_Trips_2015-Q1.csv"
-    sf_fire_file = "/databricks-datasets/learning-spark-v2/sf-fire/sf-fire-calls.csv"
+    
     # read the file into a Spark DataFrame
-    fire_df = (spark.read.format("csv")
-        .option("header", "true")
-        .option("inferSchema", "true")
-        .load(sf_fire_file))
-    fire_df.show()
-
-    print(fire_df.printSchema())
-
-    print("Total rows = %d" % (fire_df.count()))
 
 fire_schema = StructType([StructField('CallNumber', IntegerType(), True),
                      StructField('UnitID', StringType(), True),
