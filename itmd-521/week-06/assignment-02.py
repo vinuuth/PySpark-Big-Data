@@ -71,4 +71,4 @@ fire_df.select("CallType").where(col("CallType").isNotNull()).distinct().count()
 
 #select("CallType").where(col("CallType").isNotNull()).show()
 
-
+fire_df.select("CallType").where(col("CallType").isNotNull()).show()
