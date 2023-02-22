@@ -57,3 +57,7 @@ print(fire_df.printSchema())
 print(fire_df.schema)
 print ("Total rows = %d" % (fire_df.count()))
 
+
+# What were all the different types of fire calls in 2018?
+
+fire_df.select("CallType").where(col("CallType").isNotNull()).distinct().count()
