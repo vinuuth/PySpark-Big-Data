@@ -64,6 +64,7 @@ print ("Total rows = %d" % (fire_df.count()))
 
 (fire_df
  .select("CallType")
- .where((col("CallType").isNotNull())& (("CallDate").like("2018%")))
+ .where(col("CallType").isNotNull() & year("CallDate").like("2018%"))
  .agg(countDistinct("CallType").alias("DistinctCallTypes"))
  .show())
+
