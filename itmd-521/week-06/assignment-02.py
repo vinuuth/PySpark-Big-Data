@@ -70,7 +70,7 @@ print ("Total rows = %d" % (fire_df.count()))
 #sf_fire_file.filter(year('CallDate')=='2018')
 
 #select("CallType").where(col("CallType").isNotNull()).show()
-df1 = fire_df.withColumn("date_column", to_date("CallDate", "yyyy-MM-dd"))
+df1 = fire_df.withColumn("date_column", to_date("CallDate", "yyyy-MM-dd")).show()
 
 #df1.select("CallType").where(col("CallType").isNotNull()).show()
 
