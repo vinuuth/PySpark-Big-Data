@@ -67,5 +67,5 @@ print ("Total rows = %d" % (fire_df.count()))
 # .agg(countDistinct("CallType").alias("DistinctCallTypes"))
  #.show())
 
-fire_calls_2018 = df.filter(year(df["CallDate"]) == 2018).show()
+fire_calls_2018 = fire_df.filter(year(fire_df["CallDate"]) == 2018).show()
 
