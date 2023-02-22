@@ -60,5 +60,5 @@ print ("Total rows = %d" % (fire_df.count()))
 
 # What were all the different types of fire calls in 2018?
 
-fire_df.select("CallType").where((col("CallType").isNotNull()) & (year("CallDate").like("2018%"))).distinct().count().show()
+fire_df.select("CallType").where((col("CallType").isNotNull()) & (("CallDate").like("2018%"))).distinct().count().show()
 
