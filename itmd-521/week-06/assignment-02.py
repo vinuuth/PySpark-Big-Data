@@ -12,7 +12,7 @@ if __name__ == "__main__":
         .builder
         .appName("SF_Fire")
         .getOrCreate())
-    csvFile = sys.argv[1]
+    sf_fire_file = sys.argv[1]
     # get the data set file name
 
     
