@@ -95,6 +95,7 @@ fire_calls_week_df = fire_calls_2018_df.withColumn("week_number", fire_ts_df.wee
 fire_calls_count_df = fire_calls_week_df.groupBy("week_number").count()
 fire_calls_count_sorted_df = fire_calls_count_df.sort(fire_ts_df.desc("count"))
 most_fire_calls_week_2018 = fire_calls_count_sorted_df.first()["week_number"]
+most_fire_calls_week_2018.show()
 
 
 # Is there a correlation between neighborhood, zip code, and number of fire calls?
