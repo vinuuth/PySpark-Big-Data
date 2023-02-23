@@ -52,8 +52,8 @@ object assignment02 {
 
 
  //2)Identify offending countries with high levels of CO2 emissions.
-        val co2_emision = device_df.groupBy("cn").agg(avg("c02_level").alias("av_co2_level")).orderBy("av_co2_level").sort(desc("av_co2_level"))
-        co2_emission.show()
+    val emission= device_df.groupBy("cn").agg(avg("c02_level").alias("av_co2_level")).orderBy("av_co2_level").sort(desc("av_co2_level"))
+    emission.show()
         
 
 
