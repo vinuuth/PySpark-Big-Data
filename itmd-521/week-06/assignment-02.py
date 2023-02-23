@@ -109,9 +109,9 @@ print("The correlation between number of fire calls and zip code is:", correlati
 fire_calls_2018 = fire_ts_df.filter(year(fire_ts_df['IDate']) == 2018)
 
 
-calls_by_week = fire_calls_2018.groupBy(weekofyear(fire_calls_2018['IDate']).alias("week")).count().show()
+calls_by_week = fire_calls_2018.groupBy(weekofyear(fire_calls_2018['IDate']).alias("week")).count()
 
-#max_calls_week = calls_by_week.orderBy(calls_by_week['count'].desc()).first()['week']
+max_calls_week = calls_by_week.orderBy(calls_by_week['count'].desc()).first()['week'].show()
 
 #print("Week {} had the most fire calls in 2018 with {} calls.".format(max_calls_week, calls_by_week.filter(calls_by_week['week'] == max_calls_week).first()['count']))
 
