@@ -32,7 +32,10 @@ object assignment02 {
                         ))
         val iot_df = spark.read.format("json").option("header", "true").option("inferSchema", "true").load(filejson)
         println("************printSchema programmatically in Scala*************")
-        println(iot_df.printSchema)
+        iot_df.show(false)
+        print(iot_df.printSchema())
+    print(iot_df.schema)
+    println(s"Total Rows = ${iot_df.count()}")
     }
 }
   //Detect failing devices with battery levels below a threshold.
