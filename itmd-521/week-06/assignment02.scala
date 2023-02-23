@@ -79,7 +79,7 @@ object assignment02 {
 // |         Lesotho|            1274.6|
 // |      Mozambique|            1264.0|
 // +----------------+------------------+
-only showing top 20 rows
+//only showing top 20 rows
         
  //3)Compute the min and max values for temperature, battery level, CO2, and humidity.
         val optvalue = iot_df.select(min("temp").alias("min_temperature"),
