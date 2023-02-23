@@ -71,7 +71,7 @@ fire_ts_df = (fire_df
               .withColumn("AvlDtTS", to_timestamp(col("AvailableDtTm"), "MM/dd/yyyy hh:mm:ss a")))
 
 
-fire_df2018 = fire_ts_df.select("IDate","CallTypeGroup","CallType","CallDate").where((col("CallType").isNotNull()) & (col("CallDate").like("%2018%")))
+fire_df2018 = fire_ts_df.select("IDate","CallTypeGroup","CallType","CallDate","City","Neighborhood").where((col("CallType").isNotNull()) & (col("CallDate").like("%2018%")))
 fire_df2018.show()
 
 
@@ -83,4 +83,7 @@ max_count_df = fire_df2018.select(month("IDate").alias("month")).where((col("Cal
 #agg({"count": "max"})
 #max_count_df.select ((month("IDate").orderBy(count))).show()
 
-max_count_df.select ((month("IDate").where (col("count")==max(col("count"))))).show()
+
+#Which neighborhood in San Francisco generated the most fire calls in 2018?
+
+fire_df2018.select("Neighborhood").where((col("City").like("%San Francisco%")) & (col("CallTypeGroup").like("Fire%"))).groupBy("Neighborhood").count()
