@@ -9,7 +9,6 @@ object assignment02 {
         val spark = SparkSession.builder.appName("firescala").getOrCreate()
           
         if (args.length <= 0){
-            println("usage Divvy_Trips </home/vagrant/mgowda2/itmd-521/labs/week-05/Divvy_Trips_2015-Q1.csv>")
             System.exit(1)
         }
     
