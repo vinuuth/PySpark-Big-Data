@@ -86,5 +86,5 @@ max_count_df = fire_df2018.select(month("IDate").alias("month")).where((col("Cal
 
 #Which neighborhood in San Francisco generated the most fire calls in 2018?
 
-fire_df2018.select("Neighborhood").where((col("City").like("%San Francisco%")) & (col("CallTypeGroup").like("Fire%"))).groupBy("Neighborhood").count()
-fire_df2018.show()
+fire_san=fire_df2018.select("Neighborhood").where((col("City").like("%San Francisco%")) & (col("CallTypeGroup").like("Fire%"))).groupBy("Neighborhood").count()
+fire_san.show()
