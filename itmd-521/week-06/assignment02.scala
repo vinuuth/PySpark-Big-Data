@@ -7,7 +7,7 @@ import org.apache.spark.sql.types._
 object assignment02 {
     def main(args: Array[String]) {
 
-        val spark = SparkSession.builder.appName("iotscala").getOrCreate()
+        val spark = SparkSession.builder.appName("Iotscala").getOrCreate()
           
         if (args.length <= 0){
             System.exit(1)
@@ -91,6 +91,20 @@ object assignment02 {
         min("humidity").alias("min_humidity"),
         max("humidity").alias("max_humidity"))
         optvalue.show()
+
+// +---------------+---------------+----------------+----------------+-------+-------+------------+------------+
+// |min_temperature|max_temperature|min_batteryLevel|max_batteryLevel|min_co2|max_co2|min_humidity|max_humidity|
+// +---------------+---------------+----------------+----------------+-------+-------+------------+------------+
+// |             10|             34|               0|               9|    800|   1599|          25|          99|
+// +---------------+---------------+----------------+----------------+-------+-------+------------+------------+
+
+
+
+ //4)Sort and group by average temperature, CO2, humidity, and country.
+        val grpavg = device_df.groupBy("cn").agg(avg("temp").alias("av_temperapure"),avg("c02_level").alias("av_co2_level"),
+        avg("humidity").alias("av_humidity")).orderBy("av_temperapure", "av_co2_level", "av_humidity").sort(desc("av_temperapure"))
+        grpavg.show()
+
 
 
 
