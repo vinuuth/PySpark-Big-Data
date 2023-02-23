@@ -73,4 +73,4 @@ print ("Total rows = %d" % (fire_df.count()))
 #df1 = fire_df.withColumn("date_column", to_date("CallDate", "dd/mm/yyyy")).show()
 
 #df1.select("CallType").where(col("CallType").isNotNull()).show()
-fire_ts_df = fire_df.withColumn("gDate", to_timestamp(col("CallDate"), "MM/dd/yyyy")).drop("CallDate")
+fire_ts_df = fire_df.withColumn("gDate", to_timestamp(col("CallDate"), "MM/dd/yyyy")).drop("CallDate").show()
