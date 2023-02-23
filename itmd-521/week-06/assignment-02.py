@@ -66,9 +66,9 @@ fire_df.select("CallType").where((col("CallType").isNotNull()) & (col("CallDate"
 #What months within the year 2018 saw the highest number of fire calls?
 
 fire_ts_df = (fire_df
-              .withColumn("IDate", to_timestamp(col("CallDate"), "MM/dd/yyyy")).drop("CallDate") 
-              .withColumn("OnDate",   to_timestamp(col("WatchDate"), "MM/dd/yyyy")).drop("WatchDate")
-              .withColumn("AvlDtTS", to_timestamp(col("AvailableDtTm"), "MM/dd/yyyy hh:mm:ss a")).drop("AvailableDtTm")).show()
+              .withColumn("IDate", to_timestamp(col("CallDate"), "MM/dd/yyyy"))#.drop("CallDate") 
+              .withColumn("OnDate",   to_timestamp(col("WatchDate"), "MM/dd/yyyy"))#.drop("WatchDate")
+              .withColumn("AvlDtTS", to_timestamp(col("AvailableDtTm"), "MM/dd/yyyy hh:mm:ss a"))).show()
 
-#fire_ts_df.select
+fire_ts_df.select("Date").where()
 #fire_df.select("CallTypeGroup"==fire).where((col("CallTypeGroup").isNotNull()) & (col("IDate").like("%2018%"))).distinct().show()
