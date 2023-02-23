@@ -102,11 +102,20 @@ max_count_df = fire_df2018.select(week("IDate").alias("week")).where((col("CallT
 
 max_count_df.select("*").orderBy(desc("count")).show()
 
-#fire_calls_week_df = fire_calls_2018_df.withColumn("week_number", fire_ts_df.weekofyear("date"))
-#fire_calls_count_df = fire_calls_week_df.groupBy("week_number").count()
-#fire_calls_count_sorted_df = fire_calls_count_df.sort(fire_ts_df.desc("count"))
-#most_fire_calls_week_2018 = fire_calls_count_sorted_df.first()["week_number"]
-#most_fire_calls_week_2018.show()
+
+
+
+# Filter the dataset to only include fire calls from 2018
+fire_calls_2018 = fire_ts_df.filter(year(fire_ts_df['IDate']) == 2018)
+
+# Group the fire calls by week of the year and count the number of calls in each week
+calls_by_week = fire_calls_2018.groupBy(weekofyear(fire_calls_2018['IDate']).alias("week")).count()
+
+# Find the week with the highest number of fire calls
+max_calls_week = calls_by_week.orderBy(calls_by_week['count'].desc()).first()['week']
+
+print("Week {} had the most fire calls in 2018 with {} calls.".format(max_calls_week, calls_by_week.filter(calls_by_week['week'] == max_calls_week).first()['count']))
+
 
 
 # How can we use Parquet files or SQL tables to store this data and read it back?
