@@ -48,7 +48,6 @@ object assignment02 {
 // |sensor-pad-98mJQA...|            0|
 // |device-mac-99Xh5Y...|            2|
 // |sensor-pad-102D03...|            2|
-// +--------------------+-------------+
 
 
  //2)Identify offending countries with high levels of CO2 emissions.
