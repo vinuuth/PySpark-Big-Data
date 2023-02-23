@@ -82,7 +82,7 @@ object assignment02 {
 //only showing top 20 rows
         
  //3)Compute the min and max values for temperature, battery level, CO2, and humidity.
-        val optvalue = iot_df.select(min("temp").alias("min_temperature"),
+        val optvalue = device_df.select(min("temp").alias("min_temperature"),
         max("temp").alias("max_temperature"),
         min("battery_level").alias("min_batteryLevel"),
         max("battery_level").alias("max_batteryLevel"),
