@@ -20,7 +20,7 @@ object assignment02 {
         println(device_df.printSchema)
 
 
-  //Detect failing devices with battery levels below a threshold.
+  //1)Detect failing devices with battery levels below a threshold.
   val threshold= device_df.select("device_name","battery_level").where("battery_level<5")
         threshold.show()
 
@@ -52,7 +52,7 @@ object assignment02 {
 
 
  //2)Identify offending countries with high levels of CO2 emissions.
-        val co2 = device_df.groupBy("cn").agg(avg("c02_level").alias("av_co2_lvl")).orderBy("av_co2_lvl").sort(desc("av_co2_lvl"))
+        val co2 = device_df.groupBy("cn").agg(avg("c02_lvl").alias("av_co2_lvl")).orderBy("av_co2_lvl").sort(desc("av_co2_lvl"))
         co2.show()
         
 
