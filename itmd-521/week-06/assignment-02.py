@@ -96,11 +96,11 @@ fire_calls_df.show()
 print("The correlation between number of fire calls and zip code is:", correlation)
 
 # Which week in the year in 2018 had the most fire calls?
-fire_df.select("CallType").where((col("CallType").isNotNull()) & (col("CallDate").like("%2018%")))
+#fire_df.select("CallType").where((col("CallType").isNotNull()) & (col("CallDate").like("%2018%")))
 
-max_count_df = fire_df2018.select(week("IDate").alias("week")).where((col("CallTypeGroup").isNotNull()) & (col("CallTypeGroup").like("Fire%"))).groupBy("week").agg(count("*").alias("count"))
+#max_count_df = fire_df2018.select(week("IDate").alias("week")).where((col("CallTypeGroup").isNotNull()) & (col("CallTypeGroup").like("Fire%"))).groupBy("week").agg(count("*").alias("count"))
 
-max_count_df.select("*").orderBy(desc("count")).show()
+#max_count_df.select("*").orderBy(desc("count")).show()
 
 
 
