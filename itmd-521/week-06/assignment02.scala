@@ -12,30 +12,22 @@ object assignment02 {
             System.exit(1)
         }
     
-        val filejson=args(0)
-        //Defining schema programmatically 
-        val schema = StructType(Array(StructField("device_id",IntegerType,false),
-                        StructField("device_name",StringType,false),
-                        StructField("ip",StringType,false),
-                        StructField("cca2",StringType,false), 
-                        StructField("cca3",StringType,false),
-                        StructField("cn",StringType,false),
-                        StructField("latitude",LongType,false),
-                        StructField("longitude",LongType,false),
-                        StructField("scale",StringType,false),
-                        StructField("temp",IntegerType,false),
-                        StructField("humidity",IntegerType,false),
-                        StructField("battery_level",IntegerType,false),
-                        StructField("c02_level",IntegerType,false),
-                        StructField("lcd",StringType,false),
-                        StructField("timestamp",LongType,false)
-                        ))
-        val iot_df = spark.read.format("json").option("header", "true").option("inferSchema", "true").load(filejson)
-        println("************printSchema programmatically in Scala*************")
-        iot_df.show(false)
-        print(iot_df.printSchema())
-    print(iot_df.schema)
-    println(s"Total Rows = ${iot_df.count()}")
+        object assignment02 {
+    def main(args: Array[String]) {
+
+        val spark = SparkSession.builder.appName("iotscala").getOrCreate()
+          
+        if (args.length <= 0){
+            System.exit(1)
+        }
+    
+        //Infer the Schema
+        val fileJson=args(0)
+        case class DeviceIoTData (battery_level: Long, c02_level: Long,cca2: String, cca3: String, cn: String, device_id: Long,device_name: String, humidity: Long, ip: String, latitude: Double,lcd: String, longitude: Double, scale:String, temp: Long,timestamp: Long)
+
+        // read the file into a Spark DataFrame
+        val iot_df = spark.read.format("json").option("header", "true").option("inferSchema", "true").load(FileJson)
+        println(iot_df.printSchema)
     }
 }
   //Detect failing devices with battery levels below a threshold.
