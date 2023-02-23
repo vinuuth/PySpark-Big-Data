@@ -74,3 +74,4 @@ print ("Total rows = %d" % (fire_df.count()))
 
 #df1.select("CallType").where(col("CallType").isNotNull()).show()
 fire_ts_df = fire_df.withColumn("gDate", to_timestamp(col("CallDate"), "MM/dd/yyyy")).drop("CallDate").show()
+fire_ts_df.select("CallType").where((col("CallType").isNotNull()) & (year("CallDate").like("2018%"))).show()
