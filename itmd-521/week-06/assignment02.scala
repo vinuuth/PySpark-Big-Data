@@ -21,7 +21,7 @@ object assignment02 {
 
 
   //1)Detect failing devices with battery levels below a threshold.
-  val threshold= device_df.select("device_name","battery_level").where("battery_level<5")
+  val threshold= device_df.select("device_name","battery_level").where("battery_level<3")
         threshold.show()
 
 
