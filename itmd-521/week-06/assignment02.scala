@@ -5,16 +5,7 @@ import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types._
 
 object assignment02 {
-    def main(args: Array[String]) {
-
-        val spark = SparkSession.builder.appName("firescala").getOrCreate()
-          
-        if (args.length <= 0){
-            System.exit(1)
-        }
-    
-        object assignment02 {
-    def main(args: Array[String]) {
+        def main(args: Array[String]) {
 
         val spark = SparkSession.builder.appName("iotscala").getOrCreate()
           
@@ -22,9 +13,9 @@ object assignment02 {
             System.exit(1)
         }
     
-        //Infer the Schema
+        
         val fileJson=args(0)
-        case class DeviceIoTData (battery_level: Long, c02_level: Long,cca2: String, cca3: String, cn: String, device_id: Long,device_name: String, humidity: Long, ip: String, latitude: Double,lcd: String, longitude: Double, scale:String, temp: Long,timestamp: Long)
+        case class IoTData (battery_level: Long, c02_level: Long,cca2: String, cca3: String, cn: String, device_id: Long,device_name: String, humidity: Long, ip: String, latitude: Double,lcd: String, longitude: Double, scale:String, temp: Long,timestamp: Long)
 
         // read the file into a Spark DataFrame
         val device_df = spark.read.format("json").option("header", "true").option("inferSchema", "true").load(fileJson)
