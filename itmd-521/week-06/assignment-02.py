@@ -1,7 +1,7 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.types import *
 
-from pyspark.sql.functions import *
+from pyspark.sql.functions import weekofyear, year 
 
 
 if __name__ == "__main__":
@@ -106,10 +106,12 @@ print("The correlation between number of fire calls and zip code is:", correlati
 
 
 # Filter the dataset to only include fire calls from 2018
+
 fire_calls_2018 = fire_ts_df.filter(year(fire_ts_df['IDate']) == 2018)
 
 # Group the fire calls by week of the year and count the number of calls in each week
 calls_by_week = fire_calls_2018.groupBy(weekofyear(fire_calls_2018['IDate']).alias("week")).count()
+
 
 # Find the week with the highest number of fire calls
 max_calls_week = calls_by_week.orderBy(calls_by_week['count'].desc()).first()['week']
