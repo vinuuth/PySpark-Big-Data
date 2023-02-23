@@ -62,6 +62,30 @@ print ("Total rows = %d" % (fire_df.count()))
 
 fire_df.select("CallType").where((col("CallType").isNotNull()) & (col("CallDate").like("%2018%"))).distinct().show()
 
+# +--------------------+
+# |            CallType|
+# +--------------------+
+# |Elevator / Escala...|
+# |              Alarms|
+# |Odor (Strange / U...|
+# |Citizen Assist / ...|
+# |              HazMat|
+# |        Vehicle Fire|
+# |               Other|
+# |        Outside Fire|
+# |   Traffic Collision|
+# |       Assist Police|
+# |Gas Leak (Natural...|
+# |        Water Rescue|
+# |   Electrical Hazard|
+# |      Structure Fire|
+# |    Medical Incident|
+# |          Fuel Spill|
+# |Smoke Investigati...|
+# |Train / Rail Inci...|
+# |           Explosion|
+# |  Suspicious Package|
+# +--------------------+
 
 #What months within the year 2018 saw the highest number of fire calls?
 
@@ -77,13 +101,31 @@ max_count_df = fire_df2018.select(month("IDate").alias("month")).where((col("Cal
 
 max_count_df.select("*").orderBy(desc("count")).show()
 
+# +-----+-----+
+# |month|count|
+# +-----+-----+
+# |    6|   37|
+# |    4|   37|
+# |    7|   33|
+# |    1|   30|
+# |    8|   30|
+# |   10|   28|
+# |    2|   27|
+# |    3|   27|
+# |    5|   26|
+# |    9|   22|
+# |   11|   12|
+# +-----+-----+
+
 
 
 
 #Which neighborhood in San Francisco generated the most fire calls in 2018?
 
-fire_san=fire_df2018.select("Neighborhood").where((col("City").like("%San Francisco%")) & (col("CallTypeGroup").like("Fire%"))).groupBy("Neighborhood").count()
-fire_san.show()
+fire_san=fire_df2018.select("Neighborhood").where((col("City").like("%San Francisco%")) & (col("CallTypeGroup").like("Fire%"))).groupBy("Neighborhood").agg(count("*").alias("count"))
+fire_san.select("*").orderBy(desc("count")).show()
+
+
 
 # Which neighborhoods had the worst response times to fire calls in 2018?
 
