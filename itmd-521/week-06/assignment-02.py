@@ -80,4 +80,6 @@ fire_df2018.show()
 #fire_month.show()
 
 max_count_df = fire_df2018.select(month("IDate").alias("month")).where((col("CallTypeGroup").isNotNull()) & (col("CallTypeGroup").like("Fire%"))).groupBy("month").count().agg({"count": "max"})
+max_count_df.show()
+
 
