@@ -72,5 +72,5 @@ fire_ts_df = (fire_df
 
 
 fire_df2018 = fire_ts_df.select(fire_ts_df.columns[:32]).where((col("CallType").isNotNull()) & (col("IDate").like("%2018%"))).show()
-fire_df2018.select(month("IDate")).where((col("CallTypeGroup").isNotNull()) & (col("CallTypeGroup").like("Fire"))).groupBy(month("IDate")).count().show()
-
+#fire_df2018.select(month("IDate")).where((col("CallTypeGroup").isNotNull()) & (col("CallTypeGroup").like("Fire%"))).groupBy(month("IDate")).count().show()
+fire_df2018.select(month("IDate")).show()
