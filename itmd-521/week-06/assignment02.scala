@@ -12,7 +12,7 @@ object assignment02 {
             System.exit(1)
         }
     
-        val csvFile=args(0)
+        val filejson=args(0)
         //Defining schema programmatically 
         val schema = StructType(Array(StructField("device_id",IntegerType,false),
                         StructField("device_name",StringType,false),
@@ -30,9 +30,9 @@ object assignment02 {
                         StructField("lcd",StringType,false),
                         StructField("timestamp",LongType,false)
                         ))
-        val structDataFrame = spark.read.schema(schema).csv(csvFile)  
+        val iot_df = spark.read.format("json").option("header", "true").option("inferSchema", "true").load(filejson)
         println("************printSchema programmatically in Scala*************")
-        println(structDataFrame.printSchema)
+        println(iot_df.printSchema)
     }
 }
   //Detect failing devices with battery levels below a threshold.
