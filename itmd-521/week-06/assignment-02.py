@@ -219,16 +219,404 @@ calls_by_week = fire_calls_2018.groupBy(weekofyear(fire_calls_2018['IDate']).ali
 max_calls_week = calls_by_week.orderBy(calls_by_week['count'].desc()).first()['week']
 print("Week {} had the most fire calls in 2018 with {} calls.".format(max_calls_week, calls_by_week.filter(calls_by_week['week'] == max_calls_week).first()['count']))
 
-#answer
-#Week 22 had the most fire calls in 2018 with 259 calls.
+# #answer
+# #Week 22 had the most fire calls in 2018 with 259 calls.
 
 
-# How can we use Parquet files or SQL tables to store this data and read it back?
-parquest_r= fire_ts_df.write.parquet("fire_ts_df.parquet", mode="overwrite")
-parquet_schema = spark.read.parquet("fire_ts_df.parquet")
-parquet_schema.printSchema()
+# # How can we use Parquet files or SQL tables to store this data and read it back?
+# parquest_r= fire_ts_df.write.parquet("fire_ts_df.parquet", mode="overwrite")
+# parquet_schema = spark.read.parquet("fire_ts_df.parquet")
+# parquet_schema.printSchema()
+
+# {
+#   "type" : "struct",
+#   "fields" : [ {
+#     "name" : "CallNumber",
+#     "type" : "integer",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "UnitID",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "IncidentNumber",
+#     "type" : "integer",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "CallType",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "CallDate",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "WatchDate",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "CallFinalDisposition",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "AvailableDtTm",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "Address",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "City",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "Zipcode",
+#     "type" : "integer",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "Battalion",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "StationArea",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "Box",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "OriginalPriority",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "Priority",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "FinalPriority",
+#     "type" : "integer",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "ALSUnit",
+#     "type" : "boolean",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "CallTypeGroup",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "NumAlarms",
+#     "type" : "integer",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "UnitType",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "UnitSequenceInCallDispatch",
+#     "type" : "integer",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "FirePreventionDistrict",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "SupervisorDistrict",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "Neighborhood",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "Location",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "RowID",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "Delay",
+#     "type" : "float",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "IDate",
+#     "type" : "timestamp",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "OnDate",
+#     "type" : "timestamp",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "AvlDtTS",
+#     "type" : "timestamp",
+#     "nullable" : true,
+#     "metadata" : { }
+#   } ]
+# }
+# and corresponding Parquet message type:
+# message spark_schema {
+#   optional int32 CallNumber;
+#   optional binary UnitID (STRING);
+#   optional int32 IncidentNumber;
+#   optional binary CallType (STRING);
+#   optional binary CallDate (STRING);
+#   optional binary WatchDate (STRING);
+#   optional binary CallFinalDisposition (STRING);
+#   optional binary AvailableDtTm (STRING);
+#   optional binary Address (STRING);
+#   optional binary City (STRING);
+#   optional int32 Zipcode;
+#   optional binary Battalion (STRING);
+#   optional binary StationArea (STRING);
+#   optional binary Box (STRING);
+#   optional binary OriginalPriority (STRING);
+#   optional binary Priority (STRING);
+#   optional int32 FinalPriority;
+#   optional boolean ALSUnit;
+#   optional binary CallTypeGroup (STRING);
+#   optional int32 NumAlarms;
+#   optional binary UnitType (STRING);
+#   optional int32 UnitSequenceInCallDispatch;
+#   optional binary FirePreventionDistrict (STRING);
+#   optional binary SupervisorDistrict (STRING);
+#   optional binary Neighborhood (STRING);
+#   optional binary Location (STRING);
+#   optional binary RowID (STRING);
+#   optional float Delay;
+#   optional int96 IDate;
+#   optional int96 OnDate;
+#   optional int96 AvlDtTS;
+# }
 
 
+# 23/02/23 09:25:35 INFO ParquetWriteSupport: Initialized Parquet WriteSupport with Catalyst schema:
+# {
+#   "type" : "struct",
+#   "fields" : [ {
+#     "name" : "CallNumber",
+#     "type" : "integer",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "UnitID",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "IncidentNumber",
+#     "type" : "integer",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "CallType",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "CallDate",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "WatchDate",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "CallFinalDisposition",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "AvailableDtTm",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "Address",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "City",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "Zipcode",
+#     "type" : "integer",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "Battalion",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "StationArea",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "Box",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "OriginalPriority",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "Priority",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "FinalPriority",
+#     "type" : "integer",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "ALSUnit",
+#     "type" : "boolean",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "CallTypeGroup",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "NumAlarms",
+#     "type" : "integer",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "UnitType",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "UnitSequenceInCallDispatch",
+#     "type" : "integer",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "FirePreventionDistrict",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "SupervisorDistrict",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "Neighborhood",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "Location",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "RowID",
+#     "type" : "string",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "Delay",
+#     "type" : "float",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "IDate",
+#     "type" : "timestamp",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "OnDate",
+#     "type" : "timestamp",
+#     "nullable" : true,
+#     "metadata" : { }
+#   }, {
+#     "name" : "AvlDtTS",
+#     "type" : "timestamp",
+#     "nullable" : true,
+#     "metadata" : { }
+#   } ]
+# }
+# and corresponding Parquet message type:
+# message spark_schema {
+#   optional int32 CallNumber;
+#   optional binary UnitID (STRING);
+#   optional int32 IncidentNumber;
+#   optional binary CallType (STRING);
+#   optional binary CallDate (STRING);
+#   optional binary WatchDate (STRING);
+#   optional binary CallFinalDisposition (STRING);
+#   optional binary AvailableDtTm (STRING);
+#   optional binary Address (STRING);
+#   optional binary City (STRING);
+#   optional int32 Zipcode;
+#   optional binary Battalion (STRING);
+#   optional binary StationArea (STRING);
+#   optional binary Box (STRING);
+#   optional binary OriginalPriority (STRING);
+#   optional binary Priority (STRING);
+#   optional int32 FinalPriority;
+#   optional boolean ALSUnit;
+#   optional binary CallTypeGroup (STRING);
+#   optional int32 NumAlarms;
+#   optional binary UnitType (STRING);
+#   optional int32 UnitSequenceInCallDispatch;
+#   optional binary FirePreventionDistrict (STRING);
+#   optional binary SupervisorDistrict (STRING);
+#   optional binary Neighborhood (STRING);
+#   optional binary Location (STRING);
+#   optional binary RowID (STRING);
+#   optional float Delay;
+#   optional int96 IDate;
+#   optional int96 OnDate;
+#   optional int96 AvlDtTS;
+# }
 
 
 

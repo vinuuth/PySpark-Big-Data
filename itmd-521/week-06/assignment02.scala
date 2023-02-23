@@ -12,7 +12,6 @@ object assignment02 {
             System.exit(1)
         }
     
-        //Infer the Schema
         val csvFile=args(0)
         //Defining schema programmatically 
         val schema = StructType(Array(StructField("device_id",IntegerType,false),
@@ -32,8 +31,6 @@ object assignment02 {
                         StructField("timestamp",LongType,false)
                         ))
         val structDataFrame = spark.read.schema(schema).csv(csvFile)  
-        println("**************************************")
-        structDataFrame.show(false)
         println("************printSchema programmatically in Scala*************")
         println(structDataFrame.printSchema)
     }
