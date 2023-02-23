@@ -71,7 +71,7 @@ fire_ts_df = (fire_df
               .withColumn("AvlDtTS", to_timestamp(col("AvailableDtTm"), "MM/dd/yyyy hh:mm:ss a")))
 
 
-fire_df2018 = fire_ts_df.select("IDate","CallTypeGroup","CallType","CallDate","City","Neighborhood").where((col("CallType").isNotNull()) & (col("CallDate").like("%2018%")))
+fire_df2018 = fire_ts_df.select("IDate","CallTypeGroup","CallType","CallDate","City","Neighborhood","Delay").where((col("CallType").isNotNull()) & (col("CallDate").like("%2018%")))
 fire_df2018.show()
 
 
@@ -88,3 +88,8 @@ max_count_df = fire_df2018.select(month("IDate").alias("month")).where((col("Cal
 
 fire_san=fire_df2018.select("Neighborhood").where((col("City").like("%San Francisco%")) & (col("CallTypeGroup").like("Fire%"))).groupBy("Neighborhood").count()
 fire_san.show()
+
+# Which neighborhoods had the worst response times to fire calls in 2018?
+
+fire_delay=fire_df2018.select("Neighborhood","Delay").where((col("City").like("%San Francisco%")) & (col("CallTypeGroup").like("Fire%"))).groupBy("Neighborhood").count()
+fire_delay.show()
