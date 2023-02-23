@@ -79,6 +79,7 @@ max_count_df.select("*").orderBy(desc("count")).show()
 
 
 
+
 #Which neighborhood in San Francisco generated the most fire calls in 2018?
 
 fire_san=fire_df2018.select("Neighborhood").where((col("City").like("%San Francisco%")) & (col("CallTypeGroup").like("Fire%"))).groupBy("Neighborhood").count()
@@ -118,12 +119,13 @@ print("Week {} had the most fire calls in 2018 with {} calls.".format(max_calls_
 
 
 # How can we use Parquet files or SQL tables to store this data and read it back?
+parquest_r= fire_ts_df.write.parquet("fire_ts_df.parquet", mode="overwrite")
+parquet_schema = spark.read.parquet("fire_ts_df.parquet")
+parquet_schema.printSchema()
 
-parquet_path = ...
-fire_df.write.format("parquet").save(parquet_path)
 
-parquet_table = ... # name of the table
-fire_df.write.format("parquet").saveAsTable(parquet_table)
+
+
 
 
 
