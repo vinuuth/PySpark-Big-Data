@@ -68,10 +68,12 @@ fire_df.select("CallType").where((col("CallType").isNotNull()) & (col("CallDate"
 fire_ts_df = (fire_df
               .withColumn("IDate", to_timestamp(col("CallDate"), "MM/dd/yyyy"))#.drop("CallDate") 
               .withColumn("OnDate",   to_timestamp(col("WatchDate"), "MM/dd/yyyy"))#.drop("WatchDate")
-              .withColumn("AvlDtTS", to_timestamp(col("AvailableDtTm"), "MM/dd/yyyy hh:mm:ss a"))).show()
+              .withColumn("AvlDtTS", to_timestamp(col("AvailableDtTm"), "MM/dd/yyyy hh:mm:ss a")))
 
 
-fire_df2018 = fire_ts_df.select("IDate","CallTypeGroup","CallType","CallDate").show()
+fire_df2018 = fire_ts_df.select("IDate","CallTypeGroup","CallType","CallDate")
+fire_df2018.show()
+
 #.where((col("CallType").isNotNull()) & (col("CallDate").like("%2018%"))).show()
 #fire_df2018.select(month("IDate")).where((col("CallTypeGroup").isNotNull()) & (col("CallTypeGroup").like("Fire%"))).groupBy(month("IDate")).count().show()
 #fire_df2018.select(month("IDate")).show()
