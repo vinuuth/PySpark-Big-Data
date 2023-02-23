@@ -95,7 +95,11 @@ fire_delay=fire_df2018.select("Neighborhood","Delay").where(col("CallTypeGroup")
 fire_delay.show()
 
 # Which week in the year in 2018 had the most fire calls?
-
+fire_calls_2018_df = fire_ts_df.filter(F.year("IDate") == 2018)
+fire_calls_week_df = fire_calls_2018_df.withColumn("week_number", F.weekofyear("date"))
+fire_calls_count_df = fire_calls_week_df.groupBy("week_number").count()
+fire_calls_count_sorted_df = fire_calls_count_df.sort(F.desc("count"))
+most_fire_calls_week_2018 = fire_calls_count_sorted_df.first()["week_number"]
 
 
 # Is there a correlation between neighborhood, zip code, and number of fire calls?
