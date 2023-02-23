@@ -13,10 +13,6 @@ if __name__ == "__main__":
         .appName("SF_Fire")
         .getOrCreate())
     sf_fire_file = sys.argv[1]
-    # get the data set file name
-
-    
-    # read the file into a Spark DataFrame
 
 fire_schema = StructType([StructField('CallNumber', IntegerType(), True),
                      StructField('UnitID', StringType(), True),
