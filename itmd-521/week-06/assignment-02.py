@@ -75,5 +75,9 @@ fire_df2018 = fire_ts_df.select("IDate","CallTypeGroup","CallType","CallDate").w
 fire_df2018.show()
 
 
-fire_df2018.select(("CallTypeGroup")).where((col("CallTypeGroup").isNotNull()) & (col("CallTypeGroup").like("Fire%"))).show()
+#fire_month = fire_df2018.select(("CallTypeGroup","IDate")).where((col("CallTypeGroup").isNotNull()) & (col("CallTypeGroup").like("Fire%")))
+
+#fire_month.show()
+
+max_count_df = fire_df2018.select(month("IDate").alias("month")).where((col("CallTypeGroup").isNotNull()) & (col("CallTypeGroup").like("Fire%"))).groupBy("month").count().agg({"count": "max"})
 
