@@ -13,21 +13,7 @@ object assignment02 {
             System.exit(1)
         }
         val fileJson=args(0)
-        case class IoTData (battery_level: Long, 
-                            c02_level: Long,
-                            cca2: String,
-                            cca3: String, 
-                            cn: String, 
-                            device_id: Long,
-                            device_name: String,
-                            humidity: Long,
-                            ip: String,
-                            latitude: Double,
-                            lcd: String,
-                            longitude: Double, 
-                            scale:String, 
-                            temp: Long,
-                            timestamp: Long)
+        case class IoTData (battery_level: Long, c02_level: Long,cca2: String, cca3: String, cn: String, device_id: Long,device_name: String, humidity: Long, ip: String, latitude: Double,lcd: String, longitude: Double, scale:String, temp: Long,timestamp: Long)
 
         // read the file into a Spark DataFrame
         val device_df = spark.read.format("json").option("header", "true").option("inferSchema", "true").load(fileJson)
