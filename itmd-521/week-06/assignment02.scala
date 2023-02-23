@@ -14,15 +14,6 @@ object assignment02 {
     
         //Infer the Schema
         val csvFile=args(0)
-        val inferDataFrame = spark.read.format("csv").option("header","true").option("inferSchema","true").load(csvFile)
-        println("**************************************")
-        inferDataFrame.show(false)
-        println("***************printSchema inferred in Scala**************")
-        println(inferDataFrame.printSchema)
-        println("**************Number of records*****************")
-        println("Number of records in infer DataFrame = "+ inferDataFrame.count())
-        println("****************End of infer schema***************")
-        
         //Defining schema programmatically 
         val schema = StructType(Array(StructField("device_id",IntegerType,false),
                         StructField("device_name",StringType,false),
