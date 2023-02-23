@@ -59,22 +59,16 @@ print ("Total rows = %d" % (fire_df.count()))
 
 
 # What were all the different types of fire calls in 2018?
-#df = df.withColumn("CallDate", to_date("date_column", "yyyy-MM-dd"))
-#fire_df.select("CallType").where(col("CallType").isNotNull()).distinct().count().show()
-#fire_df.select("CallType","CallDate").where(col("CallType").isNotNull()).show()
+
 fire_df.select("CallType").where((col("CallType").isNotNull()) & (col("CallDate").like("%2018%"))).distinct().show()
-#fire_df.select("CallType",year("date_column").alias("year")).where(col("CallType").isNotNull()).distinct().show(10)
-# .agg(countDistinct("CallType").alias("DistinctCallTypes"))
- #.show())
-
-#sf_fire_file.filter(year('CallDate')=='2018')
-
-#select("CallType").where(col("CallType").isNotNull()).show()
-
-#df1 = fire_df.withColumn("date_column", to_date("CallDate", "dd/mm/yyyy")).show()
-
-#df1.select("CallType").where(col("CallType").isNotNull()).show()
-#fire_ts_df = fire_df.withColumn("gDate", to_timestamp(col("CallDate"), "MM/dd/yyyy")).drop("CallDate").show()
-#fire_ts_df.select("CallType").where((col("CallType").isNotNull()) & (year("gDate").like("%2018%"))).show()
 
 
+#What months within the year 2018 saw the highest number of fire calls?
+
+fire_ts_df = (fire_df
+              .withColumn("IDate", to_timestamp(col("CallDate"), "MM/dd/yyyy")).drop("CallDate") 
+              .withColumn("OnDate",   to_timestamp(col("WatchDate"), "MM/dd/yyyy")).drop("WatchDate")
+              .withColumn("AvlDtTS", to_timestamp(col("AvailableDtTm"), "MM/dd/yyyy hh:mm:ss a")).drop("AvailableDtTm")).show()
+
+#fire_ts_df.select
+#fire_df.select("CallTypeGroup"==fire).where((col("CallTypeGroup").isNotNull()) & (col("IDate").like("%2018%"))).distinct().show()
