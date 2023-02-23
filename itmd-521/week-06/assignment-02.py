@@ -91,5 +91,5 @@ fire_san.show()
 
 # Which neighborhoods had the worst response times to fire calls in 2018?
 
-fire_delay=fire_df2018.select("Neighborhood","Delay").where((col("CallTypeGroup").like("Fire%")) & (col("Delay")==max(fire_df2018.Delay)))
+fire_delay=fire_df2018.select("Neighborhood","Delay").where(col("CallTypeGroup").like("Fire%")).orderBy(desc("Delay"))
 fire_delay.show()
