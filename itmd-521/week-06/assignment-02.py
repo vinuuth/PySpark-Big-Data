@@ -72,16 +72,10 @@ fire_ts_df = (fire_df
 
 
 fire_df2018 = fire_ts_df.select("IDate","CallTypeGroup","CallType","CallDate","City","Neighborhood","Delay").where((col("CallType").isNotNull()) & (col("CallDate").like("%2018%")))
-fire_df2018.show()
 
+max_count_df = fire_df2018.select(month("IDate").alias("month")).where((col("CallTypeGroup").isNotNull()) & (col("CallTypeGroup").like("Fire%"))).groupBy("month").agg(count("*").alias("count")).show()
 
-#fire_month = fire_df2018.select(("CallTypeGroup","IDate")).where((col("CallTypeGroup").isNotNull()) & (col("CallTypeGroup").like("Fire%")))
-
-#fire_month.show()
-
-max_count_df = fire_df2018.select(month("IDate").alias("month")).where((col("CallTypeGroup").isNotNull()) & (col("CallTypeGroup").like("Fire%"))).groupBy("month").count().show()
-#agg({"count": "max"})
-#max_count_df.show()
+max_count_df.select(*).orderBy(desc("count"))
 
 
 #Which neighborhood in San Francisco generated the most fire calls in 2018?
@@ -95,10 +89,10 @@ fire_delay=fire_df2018.select("Neighborhood","Delay").where(col("CallTypeGroup")
 fire_delay.show()
 
 # Which week in the year in 2018 had the most fire calls?
-fire_calls_2018_df = fire_ts_df.filter(F.year("IDate") == 2018)
-fire_calls_week_df = fire_calls_2018_df.withColumn("week_number", F.weekofyear("date"))
+fire_calls_2018_df = fire_ts_df.filter(fire_ts_df.year("IDate") == 2018)
+fire_calls_week_df = fire_calls_2018_df.withColumn("week_number", fire_ts_df.weekofyear("date"))
 fire_calls_count_df = fire_calls_week_df.groupBy("week_number").count()
-fire_calls_count_sorted_df = fire_calls_count_df.sort(F.desc("count"))
+fire_calls_count_sorted_df = fire_calls_count_df.sort(fire_ts_df.desc("count"))
 most_fire_calls_week_2018 = fire_calls_count_sorted_df.first()["week_number"]
 
 
@@ -108,3 +102,5 @@ fire_calls_df = fire_df.filter(fire_df.CallTypeGroup.like("Fire%")).groupBy("Nei
 correlation = fire_calls_df.stat.corr("num_calls", "Zipcode")
 fire_calls_df.show()
 print("The correlation between number of fire calls and zip code is:", correlation)
+
+# How can we use Parquet files or SQL tables to store this data and read it back?
