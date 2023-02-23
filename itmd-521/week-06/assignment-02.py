@@ -70,6 +70,7 @@ fire_df.select("CallType").where((col("CallType").isNotNull()) & (col("CallDate"
 #sf_fire_file.filter(year('CallDate')=='2018')
 
 #select("CallType").where(col("CallType").isNotNull()).show()
+
 #df1 = fire_df.withColumn("date_column", to_date("CallDate", "dd/mm/yyyy")).show()
 
 #df1.select("CallType").where(col("CallType").isNotNull()).show()
