@@ -35,3 +35,6 @@ object assignment02 {
         println(structDataFrame.printSchema)
     }
 }
+  //Detect failing devices with battery levels below a threshold.
+  val threshold= iot_device_df.select("device_name","battery_level").where("battery_level<3")
+        threshold.show()
