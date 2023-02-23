@@ -100,6 +100,7 @@ fire_delay.show()
 
 # Is there a correlation between neighborhood, zip code, and number of fire calls?
 
-fire_calls_df = fire_df.filter(fire_df.CallTypeGroup.like("Fire%")).groupBy("Neighborhood", "zip_code").agg(count("*").alias("num_calls"))
-correlation = fire_calls_df.stat.corr("num_calls", "zip_code")
+fire_calls_df = fire_df.filter(fire_df.CallTypeGroup.like("Fire%")).groupBy("Neighborhood", "Zipcode").agg(count("*").alias("num_calls"))
+correlation = fire_calls_df.stat.corr("num_calls", "Zipcode")
+fire_calls_df.show()
 print("The correlation between number of fire calls and zip code is:", correlation)
