@@ -82,7 +82,24 @@ csv_file = "../../../../LearningSparkV2/databricks-datasets/learning-spark-v2/fl
 # Schema as defined in the preceding example
 schema="date STRING, delay INT, distance INT, origin STRING, destination STRING"
 flights_df = spark.read.csv(csv_file, schema=schema)
-flights_df.write.saveAsTable("managed_us_delay_flights_tbl")
+flights_df.write.saveAsTable("us_delay_flights_tbl")
+
+# df_sfo = spark.sql("SELECT date, delay, origin, destination FROM
+#  us_delay_flights_tbl WHERE origin = 'ORD'")
+# df_jfk = spark.sql("SELECT date, delay, origin, destination FROM
+#  us_delay_flights_tbl WHERE date = 'JFK'")
+
+from pyspark.sql.functions import col
+
+# Create tempView
+us_delay_flights_tbl.createOrReplaceTempView("tempView")
+
+# Filter for flights with ORD origin and March 1-15 date range
+chicago_flights = spark.sql("SELECT * FROM tempView WHERE origin = 'ORD' AND date >= '2008-03-01' AND date <= '2008-03-15'")
+
+# Show first 5 records
+chicago_flights.show(5)
+
 
 
 
