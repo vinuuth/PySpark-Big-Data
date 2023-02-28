@@ -51,17 +51,17 @@ df = spark.table("us_delay_flights_tbl") \
 
 df.show()
 
-# spark.sql("""SELECT delay, origin, destination,
-#  CASE
-#  WHEN delay > 360 THEN 'Very Long Delays'
-#  WHEN delay > 120 AND delay < 360 THEN 'Long Delays'
-#  WHEN delay > 60 AND delay < 120 THEN 'Short Delays'
-#  WHEN delay > 0 and delay < 60 THEN 'Tolerable Delays'
-#  WHEN delay = 0 THEN 'No Delays'
-#  ELSE 'Early'
-#  END AS Flight_Delays
-#  FROM us_delay_flights_tbl
-#  ORDER BY origin, delay DESC""").show(10)
+spark.sql("""SELECT delay, origin, destination,
+ CASE
+ WHEN delay > 360 THEN 'Very Long Delays'
+ WHEN delay > 120 AND delay < 360 THEN 'Long Delays'
+ WHEN delay > 60 AND delay < 120 THEN 'Short Delays'
+ WHEN delay > 0 and delay < 60 THEN 'Tolerable Delays'
+ WHEN delay = 0 THEN 'No Delays'
+ ELSE 'Early'
+ END AS Flight_Delays
+ FROM us_delay_flights_tbl
+ ORDER BY origin, delay DESC""").show(10)
 
 from pyspark.sql.functions import col, when
 
