@@ -11,7 +11,7 @@ spark = (SparkSession
 
 # Path to data set
 
-csv_file = "../../../LearningSparkV2/databricks-datasets/learning-spark-v2/flights/departuredelays.csv"
+csv_file = "../../../../LearningSparkV2/databricks-datasets/learning-spark-v2/flights/departuredelays.csv"
 # Read and create a temporary view
 # Infer schema (note that for larger files you
 # may want to specify the schema)
