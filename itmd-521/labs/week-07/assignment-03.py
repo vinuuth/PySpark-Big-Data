@@ -114,7 +114,7 @@ us_delay_flights_tbl.createOrReplaceTempView("tempView")
 chicago_flights = us_delay_flights_tbl.filter((us_delay_flights_tbl.origin == 'ORD') & (us_delay_flights_tbl.date >= '2008-03-01') & (us_delay_flights_tbl.date <= '2008-03-15')).show()
 #print("The number of flights between dates", chicago_flights)
 # Show first 5 records
-chicago_flights.show(1)
+#chicago_flights.show(1)
 
 #spark.catalog.listColumns("us_delay_flights_tbl")
 
