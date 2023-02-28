@@ -51,18 +51,31 @@ df = spark.table("us_delay_flights_tbl") \
 
 df.show()
 
-spark.sql("""SELECT delay, origin, destination,
- CASE
- WHEN delay > 360 THEN 'Very Long Delays'
- WHEN delay > 120 AND delay < 360 THEN 'Long Delays'
- WHEN delay > 60 AND delay < 120 THEN 'Short Delays'
- WHEN delay > 0 and delay < 60 THEN 'Tolerable Delays'
- WHEN delay = 0 THEN 'No Delays'
- ELSE 'Early'
- END AS Flight_Delays
- FROM us_delay_flights_tbl
- ORDER BY origin, delay DESC""").show(10)
+# spark.sql("""SELECT delay, origin, destination,
+#  CASE
+#  WHEN delay > 360 THEN 'Very Long Delays'
+#  WHEN delay > 120 AND delay < 360 THEN 'Long Delays'
+#  WHEN delay > 60 AND delay < 120 THEN 'Short Delays'
+#  WHEN delay > 0 and delay < 60 THEN 'Tolerable Delays'
+#  WHEN delay = 0 THEN 'No Delays'
+#  ELSE 'Early'
+#  END AS Flight_Delays
+#  FROM us_delay_flights_tbl
+#  ORDER BY origin, delay DESC""").show(10)
 
+from pyspark.sql.functions import col, when
+
+df = spark.table("us_delay_flights_tbl") \
+    .select("delay", "origin", "destination", 
+            when(col("delay") > 360, "Very Long Delays")
+            .when((col("delay") > 120) & (col("delay") < 360), "Long Delays")
+            .when((col("delay") > 60) & (col("delay") < 120), "Short Delays")
+            .when((col("delay") > 0) & (col("delay") < 60), "Tolerable Delays")
+            .when(col("delay") == 0, "No Delays")
+            .otherwise("Early").alias("Flight_Delays")) \
+    .orderBy("origin", col("delay").desc())
+
+df.show(10)
 
 
 
