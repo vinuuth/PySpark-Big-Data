@@ -41,6 +41,7 @@ from pyspark.sql.functions import col, desc
 # WHERE delay > 120 AND ORIGIN = 'SFO' AND DESTINATION = 'ORD'
 # ORDER by delay DESC""").show(10)
 
+from pyspark.sql.functions import col, desc
 (df.select("date","delay","distance", "origin", "destination")
     .where((col("delay") > 120) & (col("origin").like("%SFO%") )) & (col("destination").like("%ORD%"))
     .orderBy(desc("delay"))).show(10)
