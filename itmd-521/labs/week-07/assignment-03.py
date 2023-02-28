@@ -116,7 +116,7 @@ chicago_flights = us_delay_flights_tbl.filter((us_delay_flights_tbl.origin == 'O
 # Show first 5 records
 chicago_flights.show(5)
 
-spark.catalog.listColumns("us_delay_flights_tbl")
+#spark.catalog.listColumns("us_delay_flights_tbl")
 
 
 
