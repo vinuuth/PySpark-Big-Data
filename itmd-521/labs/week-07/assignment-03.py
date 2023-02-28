@@ -47,3 +47,10 @@ spark.sql("""SELECT delay, origin, destination,
  FROM us_delay_flights_tbl
  ORDER BY origin, delay DESC""").show(10)
 
+
+from pyspark.sql.functions import col, desc
+(df.select("distance", "origin", "destination")
+ .where(col("distance") > 1000)
+ .orderBy(desc("distance"))).show(10)
+
+
