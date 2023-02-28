@@ -77,12 +77,16 @@ df = spark.table("us_delay_flights_tbl") \
 
 df.show(10)
 
-# Path to our US flight delays CSV file
-# csv_file = "../../../../LearningSparkV2/databricks-datasets/learning-spark-v2/flights/departuredelays.csv"
-# # Schema as defined in the preceding example
-# schema="date STRING, delay INT, distance INT, origin STRING, destination STRING"
-# flights_df = spark.read.csv(csv_file, schema=schema)
-# flights_df.write.saveAsTable("us_delay_flights_tbl")
+csv_file = "../../../../LearningSparkV2/databricks-datasets/learning-spark-v2/flights/departuredelays.csv"
+# Schema as defined in the preceding example
+schema="date STRING, delay INT, distance INT, origin STRING, destination STRING"
+flights_df = spark.read.csv(csv_file, schema=schema)
+flights_df.write.saveAsTable("us_delay_flights_tbl")
+
+
+chicago_flights = us_delay_flights_tbl.filter((us_delay_flights_tbl.origin == 'ORD') )#& (us_delay_flights_tbl.date >= '03/01') & (us_delay_flights_tbl.date <= '03/15'))
+
+
 
 # df_sfo = spark.sql("SELECT date, delay, origin, destination FROM
 #  us_delay_flights_tbl WHERE origin = 'ORD'")
