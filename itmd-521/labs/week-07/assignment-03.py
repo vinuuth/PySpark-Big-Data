@@ -78,18 +78,28 @@ df = spark.table("us_delay_flights_tbl") \
 df.show(10)
 
 # Path to our US flight delays CSV file
-csv_file = "../../../../LearningSparkV2/databricks-datasets/learning-spark-v2/flights/departuredelays.csv"
-# Schema as defined in the preceding example
-schema="date STRING, delay INT, distance INT, origin STRING, destination STRING"
-flights_df = spark.read.csv(csv_file, schema=schema)
-flights_df.write.saveAsTable("us_delay_flights_tbl")
+# csv_file = "../../../../LearningSparkV2/databricks-datasets/learning-spark-v2/flights/departuredelays.csv"
+# # Schema as defined in the preceding example
+# schema="date STRING, delay INT, distance INT, origin STRING, destination STRING"
+# flights_df = spark.read.csv(csv_file, schema=schema)
+# flights_df.write.saveAsTable("us_delay_flights_tbl")
 
 # df_sfo = spark.sql("SELECT date, delay, origin, destination FROM
 #  us_delay_flights_tbl WHERE origin = 'ORD'")
 # df_jfk = spark.sql("SELECT date, delay, origin, destination FROM
 #  us_delay_flights_tbl WHERE date = 'JFK'")
+schema = StructType([
+    StructField("date", StringType(), True),
+    StructField("delay", IntegerType(), True),
+    StructField("distance", IntegerType(), True),
+    StructField("origin", StringType(), True),
+    StructField("destination", StringType(), True)
+])
 
-from pyspark.sql.functions import col
+# Load the CSV file into a DataFrame
+us_delay_flights_tbl = spark.read.format("csv").option("header", "true").schema(schema).load("../../../../LearningSparkV2/databricks-datasets/learning-spark-v2/flights/departuredelays.csv")
+
+#from pyspark.sql.functions import col
 
 # Create tempView
 us_delay_flights_tbl.createOrReplaceTempView("tempView")
