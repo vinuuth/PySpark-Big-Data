@@ -88,6 +88,9 @@ df.show(10)
 #  us_delay_flights_tbl WHERE origin = 'ORD'")
 # df_jfk = spark.sql("SELECT date, delay, origin, destination FROM
 #  us_delay_flights_tbl WHERE date = 'JFK'")
+
+
+
 schema = StructType([
     StructField("date", StringType(), True),
     StructField("delay", IntegerType(), True),
@@ -102,10 +105,13 @@ us_delay_flights_tbl = spark.read.format("csv").option("header", "true").schema(
 #from pyspark.sql.functions import col
 
 # Create tempView
+
+
+
 us_delay_flights_tbl.createOrReplaceTempView("tempView")
 
 # Filter for flights with ORD origin and March 1-15 date range
-chicago_flights = spark.sql("SELECT * FROM tempView WHERE origin = 'ORD' AND date >= '2008-03-01' AND date <= '2008-03-15'")
+chicago_flights = us_delay_flights_tbl.filter((us_delay_flights_tbl.origin == 'ORD') & (us_delay_flights_tbl.date >= '2008-03-01') & (us_delay_flights_tbl.date <= '2008-03-15'))
 
 # Show first 5 records
 chicago_flights.show(5)
