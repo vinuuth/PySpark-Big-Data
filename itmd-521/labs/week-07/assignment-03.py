@@ -105,7 +105,7 @@ us_delay_flights_tbl = spark.read.format("csv").option("header", "true").schema(
 #from pyspark.sql.functions import col
 
 # Create tempView
-
+print("The number of flights between dates", chicago_flights)
 
 
 us_delay_flights_tbl.createOrReplaceTempView("tempView")
