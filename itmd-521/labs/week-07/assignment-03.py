@@ -108,7 +108,8 @@ us_delay_flights_tbl = spark.read.format("csv").option("header", "true").schema(
 
 
 
-us_delay_flights_tbl.createOrReplaceTempView("tempView").show()
+us_delay_flights_tbl.createOrReplaceTempView("tempView")
+tempView.show()
 us_delay_flights_tbl1= (us_delay_flights_tbl
               .withColumn("EDate", to_timestamp(col("date"), "MM/dd")))
 # Filter for flights with ORD origin and March 1-15 date range
