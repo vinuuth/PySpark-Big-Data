@@ -30,7 +30,7 @@ df.createOrReplaceTempView("us_delay_flights_tbl")
 # ORDER BY distance DESC""").show(10)
 
 
-from pyspark.sql.functions import col, desc
+#from pyspark.sql.functions import col, desc
 (df.select("distance", "origin", "destination")
  .where(col("distance") > 1000)
  .orderBy(desc("distance"))).show(10)
@@ -41,7 +41,7 @@ from pyspark.sql.functions import col, desc
 # WHERE delay > 120 AND ORIGIN = 'SFO' AND DESTINATION = 'ORD'
 # ORDER by delay DESC""").show(10)
 
-from pyspark.sql.functions import col
+#from pyspark.sql.functions import col
 
 df = spark.table("us_delay_flights_tbl") \
     .select("date", "delay", "origin", "destination") \
@@ -77,14 +77,26 @@ df = spark.table("us_delay_flights_tbl") \
 
 df.show(10)
 
+
+
+
+#Assignment part 2
+# From page 90-92, you will create a Table named us_delay_flights_tbl from the departuredelay.csv
+# Create a tempView of all flights with an origin of Chicago (ORD) and a month/day combo of between 03/01 and 03/15
+# Show the first 5 records of the tempView, taking a screenshot
+# Use the Spark Catalog to list the columns of table us_delay_flights_tbl
+
+
+
+
 csv_file = "../../../../LearningSparkV2/databricks-datasets/learning-spark-v2/flights/departuredelays.csv"
 # Schema as defined in the preceding example
 schema="date STRING, delay INT, distance INT, origin STRING, destination STRING"
 flights_df = spark.read.csv(csv_file, schema=schema)
-flights_df.write.saveAsTable("us_delay_flights_tbl")
+flights_df.write.mode("overwrite").saveAsTable("us_delay_flights_tbl")
 
 
-chicago_flights = us_delay_flights_tbl.filter((us_delay_flights_tbl.origin == 'ORD') )#& (us_delay_flights_tbl.date >= '03/01') & (us_delay_flights_tbl.date <= '03/15'))
+chicago_flights = us_delay_flights_tbl.filter((us_delay_flights_tbl.origin == 'ORD') & (us_delay_flights_tbl.date >= '03/01') & (us_delay_flights_tbl.date <= '03/15'))
 
 
 
