@@ -107,8 +107,8 @@ us_delay_flights_tbl = spark.read.format("csv").option("header", "true").schema(
 # Create tempView
 
 
-
-us_delay_flights_tbl.createOrReplaceTempView("tempView")
+df.createOrReplaceTempView("tempView")
+#us_delay_flights_tbl.createOrReplaceTempView("tempView")
 
 # us_delay_flights_tbl1= (us_delay_flights_tbl
 #               .withColumn("EDate", to_timestamp(col("date"), "MM/dd")))
