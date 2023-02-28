@@ -10,7 +10,7 @@ spark = (SparkSession
 
 
 # Path to data set
-S
+
 csv_file = "/databricks-datasets/learning-spark-v2/flights/departuredelays.csv"
 # Read and create a temporary view
 # Infer schema (note that for larger files you
@@ -20,3 +20,9 @@ df = (spark.read.format("csv")
  .option("header", "true")
  .load(csv_file))
 df.createOrReplaceTempView("us_delay_flights_tbl")
+
+
+
+spark.sql("""SELECT distance, origin, destination
+FROM us_delay_flights_tbl WHERE distance > 1000
+ORDER BY distance DESC""").show(10)
