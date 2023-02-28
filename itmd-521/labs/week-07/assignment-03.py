@@ -23,6 +23,17 @@ df.createOrReplaceTempView("us_delay_flights_tbl")
 
 
 
-spark.sql("""SELECT distance, origin, destination
-FROM us_delay_flights_tbl WHERE distance > 1000
-ORDER BY distance DESC""").show(10)
+# spark.sql("""SELECT distance, origin, destination
+# FROM us_delay_flights_tbl WHERE distance > 1000
+# ORDER BY distance DESC""").show(10)
+
+
+# spark.sql("""SELECT date, delay, origin, destination
+# FROM us_delay_flights_tbl
+# WHERE delay > 120 AND ORIGIN = 'SFO' AND DESTINATION = 'ORD'
+# ORDER by delay DESC""").show(10)
+
+from pyspark.sql.functions import col, desc
+(df.select("distance", "origin", "destination")
+ .where(col("distance") > 1000)
+ .orderBy(desc("distance"))).show(10)
