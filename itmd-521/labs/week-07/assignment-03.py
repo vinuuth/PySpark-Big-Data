@@ -78,7 +78,7 @@ df = spark.table("us_delay_flights_tbl") \
 df.show(10)
 
 # Path to our US flight delays CSV file
-csv_file = "/databricks-datasets/learning-spark-v2/flights/departuredelays.csv"
+csv_file = "../../../../LearningSparkV2/databricks-datasets/learning-spark-v2/flights/departuredelays.csv"
 # Schema as defined in the preceding example
 schema="date STRING, delay INT, distance INT, origin STRING, destination STRING"
 flights_df = spark.read.csv(csv_file, schema=schema)
