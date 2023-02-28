@@ -109,9 +109,10 @@ us_delay_flights_tbl = spark.read.format("csv").option("header", "true").schema(
 
 
 us_delay_flights_tbl.createOrReplaceTempView("tempView")
-
+us_delay_flights_tbl1= (us_delay_flights_tbl
+              .withColumn("EDate", to_timestamp(col("date"), "MM/dd")))
 # Filter for flights with ORD origin and March 1-15 date range
-chicago_flights = us_delay_flights_tbl.filter((us_delay_flights_tbl.origin == 'ORD') & (us_delay_flights_tbl.date >= '2008-03-01') & (us_delay_flights_tbl.date <= '2008-03-15')).show()
+chicago_flights = us_delay_flights_tbl1.filter((us_delay_flights_tbl1.origin == 'ORD') & (us_delay_flights_tbl1.date >= '03/01') & (us_delay_flights_tbl1.date <= '03/15')).show()
 
 #print("The number of flights between dates", chicago_flights)
 # Show first 5 records
