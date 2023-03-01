@@ -24,7 +24,7 @@ csv_file = "../../../../LearningSparkV2/databricks-datasets/learning-spark-v2/fl
  #.option("header", "true")
  #.load(csv_file))
 
-fly_schema = "date STRING, delay INT, distance INT, origin STRING, destination STRING"
+#fly_schema = "date STRING, delay INT, distance INT, origin STRING, destination STRING"
 fly_schema= StructType([StructField('date', StringType(), True),
                      StructField('delay', StringType(), True),
                      StructField('distance', IntegerType(), True),
