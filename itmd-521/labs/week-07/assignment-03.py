@@ -100,7 +100,7 @@ fly_df.write.saveAsTable("us_delay_flights_tbl")
 
 query= spark.sql(""" SELECT dateMonth, dateDay, delay, origin, destination
         FROM us_delay_flights_tbl
-        WHERE origin ='ORD' AND dateMonth = 3 AND dateDay >>1 AND dateDay <=15
+        WHERE origin ='ORD' AND dateMonth = 3 AND dateDay >1 AND dateDay <=15
         ORDER BY delay DESC
         LIMIT 5;
         """)
