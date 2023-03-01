@@ -110,7 +110,7 @@ q_df = spark.read.query
 print("From 1st to 15th March highest delays in ORD")
 
 
-q_df.createOrReplaceTempView("us_delay_flights_tb1_tmp_view")
+q_df.createOrReplaceTempView("us_delay_flights_tbl_tmp_view")
 spark.sql("SELECT * FROM us_delay_flights_tbl_tmp_view").show(6)
 
 print(spark.catlog.listTables())
