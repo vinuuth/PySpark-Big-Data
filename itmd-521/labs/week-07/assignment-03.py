@@ -111,11 +111,10 @@ print("From 1st to 15th March highest delays in ORD")
 
 sol_query= spark.sql(query)
 sol_query.createOrReplaceTempView("us_delay_flights_tb1_tmp_view")
-spark.sql("SELECT * FROM us_delay_flights_tbl_tmp_view").show()
+spark.sql("SELECT * FROM us_delay_flights_tbl_tmp_view").show(6)
 
 print(spark.catlog.listTables())
 
-us_delay_flights_tbl.createOrReplaceTempView("tempView")
 
 
 # df_sfo = spark.sql("SELECT date, delay, origin, destination FROM
