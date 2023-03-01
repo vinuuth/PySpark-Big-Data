@@ -106,7 +106,7 @@ fy_df = fy_df.withColumn("dateMonth", from_unixtime(unix_timestamp(fy_df.date, "
 
 fy_df.write.saveAsTable("us_delay_flights_tbl")
 
-query= """SELECT dateMonth, dateDay, delay, origin, destination FROM us_delay_flights_tbls WHERE origin ='ORD' AND dateMonth = 3 AND dateDay >= 1 AND dateDay <= 15 ORDER BY delay DESC LIMIT 5;"""
+query= """SELECT dateMonth, dateDay, delay, origin, destination FROM us_delay_flights_tbl WHERE origin ='ORD' AND dateMonth = 3 AND dateDay >= 1 AND dateDay <= 15 ORDER BY delay DESC LIMIT 5;"""
 
 sol_query_df= spark.sql(query)
 sol_query_df.createOrReplaceTempView("us_delay_flights_tbl_tmp_view")
