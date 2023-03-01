@@ -19,7 +19,7 @@ csv_file = "../../../../LearningSparkV2/databricks-datasets/learning-spark-v2/fl
 # Read and create a temporary view
 # Infer schema (note that for larger files you
 # may want to specify the schema)
-# f_df = (spark.read.format("csv")
+# fy_df = (spark.read.format("csv")
  #.option("inferSchema", "true")
  #.option("header", "true")
  #.load(csv_file))
@@ -31,11 +31,9 @@ fly_schema= StructType([StructField('date', StringType(), True),
                      StructField('origin', StringType(), True),                  
                      StructField('destination', StringType(), True)])     
                      
-f_df = spark.read.csv(csv_file, header = True, schema = fly_schema)
-
-
-f_df.show()
-f_df.createOrReplaceTempView("us_delay_flights_tbl")
+fy_df = spark.read.csv(csv_file, header = True, schema = fly_schema)
+fy_df.show()
+fy_df.createOrReplaceTempView("us_delay_flights_tbl")
 
 
 
@@ -48,7 +46,7 @@ f_df.createOrReplaceTempView("us_delay_flights_tbl")
 
 
 #from pyspark.sql.functions import col, desc
-(f_df.select("distance", "origin", "destination")
+(fy_df.select("distance", "origin", "destination")
  .where(col("distance") > 1000)
  .orderBy(desc("distance"))).show(10)
 
@@ -60,13 +58,13 @@ f_df.createOrReplaceTempView("us_delay_flights_tbl")
 
 #from pyspark.sql.functions import col
 
-f_df = spark.table("us_delay_flights_tbl") \
+fy_df = spark.table("us_delay_flights_tbl") \
     .select("date", "delay", "origin", "destination") \
     .where((col("delay") > 120) & (col("origin") == "SFO") & (col("destination") == "ORD")) \
     .orderBy(col("delay").desc()) \
     .limit(10)
 
-f_df.show()
+fy_df.show()
 
 # spark.sql("""SELECT delay, origin, destination,
 #  CASE
@@ -82,7 +80,7 @@ f_df.show()
 
 #from pyspark.sql.functions import col, when
 
-f_df = spark.table("us_delay_flights_tbl") \
+fy_df = spark.table("us_delay_flights_tbl") \
     .select("delay", "origin", "destination", 
             when(col("delay") > 360, "Very Long Delays")
             .when((col("delay") > 120) & (col("delay") < 360), "Long Delays")
@@ -92,7 +90,7 @@ f_df = spark.table("us_delay_flights_tbl") \
             .otherwise("Early").alias("Flight_Delays")) \
             .orderBy("origin", col("delay").desc())
 
-f_df.show(10)
+fy_df.show(10)
 
 
 
@@ -104,33 +102,33 @@ f_df.show(10)
 # Use the Spark Catalog to list the columns of table us_delay_flights_tbl
 
 #schema="date STRING, delay INT, distance INT, origin STRING, destination STRING"
-#f_df = spark.read.csv(csv_file, schema=schema)
+#fy_df = spark.read.csv(csv_file, schema=schema)
 
-f_df = f_df.withColumn("dateMonth", from_unixtime(unix_timestamp(f_df.date, "MMddHHmm"), "MM")).withColumn("dateDay", from_unixtime(unix_timestamp(f_df.date, "MMddHHmm"), "dd"))
+fy_df = fy_df.withColumn("dateMonth", from_unixtime(unix_timestamp(fy_df.date, "MMddHHmm"), "MM")).withColumn("dateDay", from_unixtime(unix_timestamp(fy_df.date, "MMddHHmm"), "dd"))
 
 
 # csv_file = "../../../../LearningSparkV2/databricks-datasets/learning-spark-v2/flights/departuredelays.csv"
 # Schema as defined in the preceding example
 
-f_df.write.saveAsTable("us_delay_flights_tbl1")
+fy_df.write.saveAsTable("us_delay_flights_tbls")
 
-sol_query= spark.sql("SELECT dateMonth, dateDay, delay, origin, destination FROM us_delay_flights_tbl1 WHERE origin ='ORD' AND dateMonth = 3 AND dateDay >= 1 AND dateDay <= 15 ORDER BY delay DESC")
+sol_query= spark.sql("SELECT dateMonth, dateDay, delay, origin, destination FROM us_delay_flights_tbls WHERE origin ='ORD' AND dateMonth = 3 AND dateDay >= 1 AND dateDay <= 15 ORDER BY delay DESC")
 q_df = spark.read.sol_query
 
 
 #print("From 1st to 15th March highest delays in ORD")
 
 
-q_df.createOrReplaceTempView("us_delay_flights_tbl1_tmp_view")
-spark.sql("SELECT * FROM us_delay_flights_tbl1_tmp_view").show()
+q_df.createOrReplaceTempView("us_delay_flights_tbls_tmp_view")
+spark.sql("SELECT * FROM us_delay_flights_tbls_tmp_view").show()
 
 print(spark.catlog.listTables())
 
 
 
-# df_sfo = spark.sql("SELECT date, delay, origin, destination FROM
+# dfy_sfo = spark.sql("SELECT date, delay, origin, destination FROM
 #  us_delay_flights_tbl WHERE origin = 'ORD'")
-# df_jfk = spark.sql("SELECT date, delay, origin, destination FROM
+# dfy_jfk = spark.sql("SELECT date, delay, origin, destination FROM
 #  us_delay_flights_tbl WHERE date = 'JFK'")
 
 
