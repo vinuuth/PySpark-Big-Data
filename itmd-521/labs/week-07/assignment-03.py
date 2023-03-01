@@ -87,12 +87,10 @@ f_df.show(10)
 # Create a tempView of all flights with an origin of Chicago (ORD) and a month/day combo of between 03/01 and 03/15
 # Show the first 5 records of the tempView, taking a screenshot
 # Use the Spark Catalog to list the columns of table us_delay_flights_tbl
+
 schema="date STRING, delay INT, distance INT, origin STRING, destination STRING"
 fly_df = spark.read.csv(csv_file, schema=schema)
 fly_df = fly_df.withColumn("dateMonth", from_unixtime(unix_timestamp(fly_df.date, "MMddHHmm"), "MM")).withColumn("dateDay", from_unixtime(unix_timestamp(fly_df.date, "MMddHHmm"), "dd"))
-
-
-
 
 
 # csv_file = "../../../../LearningSparkV2/databricks-datasets/learning-spark-v2/flights/departuredelays.csv"
@@ -100,17 +98,19 @@ fly_df = fly_df.withColumn("dateMonth", from_unixtime(unix_timestamp(fly_df.date
 
 fly_df.write.saveAsTable("us_delay_flights_tbl")
 
-query= """ SELECT dateMonth, dateDay, delay, origin, destination
+query= spark.sql(""" SELECT dateMonth, dateDay, delay, origin, destination
         FROM us_delay_flights_tbl
         WHERE origin ='ORD' AND dateMonth = 3 AND dateDay >>1 AND dateDay <=15
         ORDER BY delay DESC
         LIMIT 5;
-        """
+        """)
+q_df = spark.read.query
+
 
 print("From 1st to 15th March highest delays in ORD")
 
-sol_query= spark.sql(query)
-sol_query.createOrReplaceTempView("us_delay_flights_tb1_tmp_view")
+
+q_df.createOrReplaceTempView("us_delay_flights_tb1_tmp_view")
 spark.sql("SELECT * FROM us_delay_flights_tbl_tmp_view").show(6)
 
 print(spark.catlog.listTables())
