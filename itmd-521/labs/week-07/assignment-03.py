@@ -15,10 +15,15 @@ csv_file = "../../../../LearningSparkV2/databricks-datasets/learning-spark-v2/fl
 # Read and create a temporary view
 # Infer schema (note that for larger files you
 # may want to specify the schema)
-f_df = (spark.read.format("csv")
- .option("inferSchema", "true")
- .option("header", "true")
- .load(csv_file))
+# f_df = (spark.read.format("csv")
+ #.option("inferSchema", "true")
+ #.option("header", "true")
+ #.load(csv_file))
+
+schema = "date STRING, delay INT, distance INT, origin STRING, destination STRING"
+f_df = spark.read.csv(csv_file, header=True, schema=schema)
+
+
 f_df.show()
 f_df.createOrReplaceTempView("us_delay_flights_tbl")
 
@@ -88,19 +93,20 @@ f_df.show(10)
 # Show the first 5 records of the tempView, taking a screenshot
 # Use the Spark Catalog to list the columns of table us_delay_flights_tbl
 
-schema="date STRING, delay INT, distance INT, origin STRING, destination STRING"
-fly_df = spark.read.csv(csv_file, schema=schema)
-fly_df = fly_df.withColumn("dateMonth", from_unixtime(unix_timestamp(fly_df.date, "MMddHHmm"), "MM")).withColumn("dateDay", from_unixtime(unix_timestamp(fly_df.date, "MMddHHmm"), "dd"))
+#schema="date STRING, delay INT, distance INT, origin STRING, destination STRING"
+#f_df = spark.read.csv(csv_file, schema=schema)
+
+f_df = f_df.withColumn("dateMonth", from_unixtime(unix_timestamp(f_df.date, "MMddHHmm"), "MM")).withColumn("dateDay", from_unixtime(unix_timestamp(f_df.date, "MMddHHmm"), "dd"))
 
 
 # csv_file = "../../../../LearningSparkV2/databricks-datasets/learning-spark-v2/flights/departuredelays.csv"
 # Schema as defined in the preceding example
 
-fly_df.write.saveAsTable("us_delay_flights_tbl")
+f_df.write.saveAsTable("us_delay_flights_tbl")
 
 query= spark.sql(""" SELECT dateMonth, dateDay, delay, origin, destination
         FROM us_delay_flights_tbl
-        WHERE origin ='ORD' AND dateMonth = 3 AND dateDay >1 AND dateDay <=15
+        WHERE origin ='ORD' AND dateMonth = 3 AND dateDay >= 1 AND dateDay <= 15
         ORDER BY delay DESC
         LIMIT 5;
         """)
@@ -127,7 +133,7 @@ print(spark.catlog.listTables())
 
 
 # Load the CSV file into a DataFrame
-us_delay_flights_tbl = spark.read.format("csv").option("header", "true").schema(schema).load("../../../../LearningSparkV2/databricks-datasets/learning-spark-v2/flights/departuredelays.csv")
+#us_delay_flights_tbl = spark.read.format("csv").option("header", "true").schema(schema).load("../../../../LearningSparkV2/databricks-datasets/learning-spark-v2/flights/departuredelays.csv")
 
 #from pyspark.sql.functions import col
 
