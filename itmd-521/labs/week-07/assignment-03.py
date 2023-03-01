@@ -104,19 +104,20 @@ fy_df = fy_df.withColumn("dateMonth", from_unixtime(unix_timestamp(fy_df.date, "
 # csv_file = "../../../../LearningSparkV2/databricks-datasets/learning-spark-v2/flights/departuredelays.csv"
 # Schema as defined in the preceding example
 
-fy_df.write.saveAsTable("us_delay_flights_tbls")
+fy_df.write.saveAsTable("us_delay_flights_tbl")
 
-sol_query= spark.sql("SELECT dateMonth, dateDay, delay, origin, destination FROM us_delay_flights_tbls WHERE origin ='ORD' AND dateMonth = 3 AND dateDay >= 1 AND dateDay <= 15 ORDER BY delay DESC")
-q_df = spark.read.sol_query
+query= """SELECT dateMonth, dateDay, delay, origin, destination FROM us_delay_flights_tbls WHERE origin ='ORD' AND dateMonth = 3 AND dateDay >= 1 AND dateDay <= 15 ORDER BY delay DESC LIMIT 5;"""
 
-
+sol_query_df= spark.sql(query)
+sol_query_df.createOrReplaceTempView("us_delay_flights_tbl_tmp_view")
+spark.sql("SELECT * FROM us_delay_flights_tbl_tmp_view").show()
 #print("From 1st to 15th March highest delays in ORD")
 
 
-q_df.createOrReplaceTempView("us_delay_flights_tbls_tmp_view")
-spark.sql("SELECT * FROM us_delay_flights_tbls_tmp_view").show()
+# q_df.createOrReplaceTempView("us_delay_flights_tbls_tmp_view")
+# spark.sql("SELECT * FROM us_delay_flights_tbls_tmp_view").show()
 
-print(spark.catlog.listTables())
+# print(spark.catlog.listTables()
 
 
 
