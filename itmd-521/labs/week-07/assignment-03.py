@@ -58,13 +58,13 @@ fy_df.createOrReplaceTempView("us_delay_flights_tbl")
 
 #from pyspark.sql.functions import col
 
-fy_df = spark.table("us_delay_flights_tbl") \
-    .select("date", "delay", "origin", "destination") \
+
+(fy_df.select("date", "delay", "origin", "destination") \
     .where((col("delay") > 120) & (col("origin") == "SFO") & (col("destination") == "ORD")) \
     .orderBy(col("delay").desc()) \
-    .limit(10)
+    .limit(10)).show()
 
-fy_df.show()
+
 
 # spark.sql("""SELECT delay, origin, destination,
 #  CASE
@@ -80,20 +80,14 @@ fy_df.show()
 
 #from pyspark.sql.functions import col, when
 
-fy_df = spark.table("us_delay_flights_tbl") \
-    .select("delay", "origin", "destination", 
+(fy_df.select("delay", "origin", "destination", 
             when(col("delay") > 360, "Very Long Delays")
             .when((col("delay") > 120) & (col("delay") < 360), "Long Delays")
             .when((col("delay") > 60) & (col("delay") < 120), "Short Delays")
             .when((col("delay") > 0) & (col("delay") < 60), "Tolerable Delays")
             .when(col("delay") == 0, "No Delays")
             .otherwise("Early").alias("Flight_Delays")) \
-            .orderBy("origin", col("delay").desc())
-
-fy_df.show(10)
-
-
-
+            .orderBy("origin", col("delay").desc())).show(10)
 
 #Assignment part 2
 # From page 90-92, you will create a Table named us_delay_flights_tbl from the departuredelay.csv
