@@ -106,8 +106,8 @@ print("with column completed")
 
 fy_df.write.saveAsTable("us_delay_flights_tbl")
 print("save completed")
-query= "SELECT dateMonth, dateDay, delay, origin, destination FROM us_delay_flights_tbl WHERE origin ='ORD' AND dateMonth = 3 AND dateDay >= 1 AND dateDay <= 15 ORDER BY delay DESC LIMIT 5;"
-
+# query= "SELECT dateMonth, dateDay, delay, origin, destination FROM us_delay_flights_tbl WHERE origin ='ORD' AND dateMonth = 3 AND dateDay >= 1 AND dateDay <= 15 ORDER BY delay DESC LIMIT 5;"
+query = "SELECT * FROM us_delay_flights_tbl"
 sol_query_df= spark.sql(query)
 print("query creation completed")
 sol_query_df.createOrReplaceTempView("us_delay_flights_tbl_tmp_view")
