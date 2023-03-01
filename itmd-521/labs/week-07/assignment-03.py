@@ -15,12 +15,6 @@ if __name__ == "__main__":
 
 csv_file = "../../../../LearningSparkV2/databricks-datasets/learning-spark-v2/flights/departuredelays.csv"
 
-
-# Read and create a temporary view
-# Infer schema (note that for larger files you
-# may want to specify the schema)
-
-
 #fly_schema = "date STRING, delay INT, distance INT, origin STRING, destination STRING"
 fly_schema= StructType([StructField('date', StringType(), True),
                      StructField('delay', StringType(), True),
@@ -60,6 +54,8 @@ fy_df.show()
             .orderBy("origin", col("delay").desc())).show(10)
 
 #Assignment part 2
+
+
 # From page 90-92, you will create a Table named us_delay_flights_tbl from the departuredelay.csv
 # Create a tempView of all flights with an origin of Chicago (ORD) and a month/day combo of between 03/01 and 03/15
 # Show the first 5 records of the tempView, taking a screenshot
@@ -71,51 +67,11 @@ fy_df = fy_df.withColumn("dateMonth", from_unixtime(unix_timestamp(fy_df.date, "
 
 # Schema as defined in the preceding example
 
-fy_df.write.saveAsTable("us_delay_flights_tbl")
+#fy_df.write.saveAsTable("us_delay_flights_tbl")
+
+fy_df.write.option("path","./spark-warehouse").mode("overwrite").saveAsTable("us_delay_flights_tbl")
 query= "SELECT dateMonth, dateDay, delay, origin, destination FROM us_delay_flights_tbl WHERE origin ='ORD' AND dateMonth = 3 AND dateDay >= 1 AND dateDay <= 15 ORDER BY delay DESC LIMIT 5;"
 sol_query_df= spark.sql(query)
+
 sol_query_df.createOrReplaceTempView("us_delay_flights_tbl_tmp_view")
 spark.sql("SELECT * FROM us_delay_flights_tbl_tmp_view").show()
-#print("From 1st to 15th March highest delays in ORD")
-
-
-# q_df.createOrReplaceTempView("us_delay_flights_tbls_tmp_view")
-# spark.sql("SELECT * FROM us_delay_flights_tbls_tmp_view").show()
-
-# print(spark.catlog.listTables()
-
-
-
-# dfy_sfo = spark.sql("SELECT date, delay, origin, destination FROM
-#  us_delay_flights_tbl WHERE origin = 'ORD'")
-# dfy_jfk = spark.sql("SELECT date, delay, origin, destination FROM
-#  us_delay_flights_tbl WHERE date = 'JFK'")
-
-
-
-
-
-# Load the CSV file into a DataFrame
-#us_delay_flights_tbl = spark.read.format("csv").option("header", "true").schema(schema).load("../../../../LearningSparkV2/databricks-datasets/learning-spark-v2/flights/departuredelays.csv")
-
-#from pyspark.sql.functions import col
-
-# Create tempView
-
-
-#us_delay_flights_tbl.createOrReplaceTempView("tempView")
-
-
-
-
-#print("The number of flights between dates", chicago_flights)
-# Show first 5 records
-#chicago_flights.show(5)
-
-#spark.catalog.listColumns("us_delay_flights_tbl")
-
-
-
-
-
-
