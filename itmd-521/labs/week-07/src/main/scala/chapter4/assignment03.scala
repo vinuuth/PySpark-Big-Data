@@ -30,16 +30,16 @@ flight_df.show()
 
 //For the first query
 flight_df.select("distance", "origin", "destination")
-.filter(col("distance") > (1000))
-.orderBy(desc("distance"))
-.show(10)
+ .filter(col("distance") > (1000))
+ .orderBy(desc("distance"))
+ .show(10)
 
 // For the second query
 flight_df.select("date", "delay", "origin", "destination")
-.filter(col("delay") > 120) && (col("origin") === "SFO") && (col("destination") === "ORD")
-.orderBy(col("delay").desc())
-.limit(10)
-.show()
+ .filter(col("delay") > 120 && col("origin") === "SFO" && col("destination") === "ORD")
+ .orderBy(col("delay").desc())
+ .limit(10)
+ .show()
 
 // For the third query
 flight_df.select("delay", "origin", "destination",
