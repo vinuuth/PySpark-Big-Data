@@ -80,19 +80,19 @@ val snappy_path = "./spark-warehouse/snappy_path"
 fli_df.write.format("json").mode("overwrite").option("compression", "lz4").save(snappy_path)
 
 
-val parquet_path ="./spark-warehouse/parquet_path"
-fli_df.write.format("parquet").mode("overwrite").parquet(parquet_path)
+val parquett_path ="./spark-warehouse/parquet_path"
+fli_df.write.format("parquet").mode("overwrite").parquet(parquett_path)
 
 
 //Assignment part 4
 
-val parquet_path = "./spark-warehouse/parquet_path/new_parquet"
+val par_path = "./spark-warehouse/parquet_path/new_parquet"
 
-val part_fourDF = spark.read.format("parquet").load(parquet_path)
+val part_fourDF = spark.read.format("parquet").load(par_path)
 
 val orddeparturedelays = part_fourDF.filter(col("origin") === "ORD")
 
-orddeparturedelays.write.format("parquet").mode("overwrite").save(parquet_path)
+orddeparturedelays.write.format("parquet").mode("overwrite").save(par_path)
 
 orddeparturedelays.show(10)
 
