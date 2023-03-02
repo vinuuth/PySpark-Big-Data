@@ -99,8 +99,8 @@ fly_df.write.format("parquet").mode("overwrite").parquet(parquet_path)
 # Save as type Parquet
 from pyspark.sql.functions import col
 partfour_df= spark.read.parquet(parquet_path)
-ord_df=partfour_df.select("*").where(col('origin') == 'ORD')
-ord_df.show(10)
+ord_df = partfour_df.select("*").where(col('origin') == 'ORD')
+#ord_df.show(10)
 
 partfour_parquet_path="./spark-warehouse/partfour_parquet_path"
 
@@ -108,7 +108,7 @@ orddeparturedelays = partfour_df.write.mode("overwrite")
 
 orddeparturedelays.parquet(partfour_parquet_path)
 
-ordep_df= spark.read.parquet(partfour_parquet_path)
-ordep_df.show(10)
+ord_dep_df= spark.read.parquet(partfour_parquet_path)
+ord_dep_df.show(10)
 
 
