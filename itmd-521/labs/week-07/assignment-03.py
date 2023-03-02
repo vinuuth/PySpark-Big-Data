@@ -65,9 +65,7 @@ fly_df.show()
 
 fly_df = fly_df.withColumn("dateMonth", from_unixtime(unix_timestamp(fly_df.date, "MMddHHmm"), "MM")).withColumn("dateDay", from_unixtime(unix_timestamp(fly_df.date, "MMddHHmm"), "dd"))
 
-# Schema as defined in the preceding example
 
-#fly_df.write.saveAsTable("us_delay_flights_tbl")
 
 fly_df.write.option("path","/home/vagrant//vbengaluruprabhudev/itmd-521/labs/week-07/spark-warehouse").mode("overwrite").saveAsTable("us_delay_flights_tbl")
 query= "SELECT dateMonth, dateDay, delay, origin, destination FROM us_delay_flights_tbl WHERE origin ='ORD' AND dateMonth = 3 AND dateDay >= 1 AND dateDay <= 15 ORDER BY delay DESC LIMIT 5;"
@@ -98,20 +96,6 @@ fly_df.write.format("parquet").mode("overwrite").parquet(parquet_path)
 # Use a .show(10) function to print out the first 10 lines, and take a screenshot
 # Save as type Parquet
 
-
-# from pyspark.sql.functions import col
-# partfour_df= spark.read.parquet(parquet_path)
-# ord_df = partfour_df.select("*").where(col('origin') == 'ORD')
-# #ord_df.show(10)
-
-# partfour_parquet_path="./spark-warehouse/partfour_parquet_path"
-
-# orddeparturedelays = partfour_df.write.mode("overwrite")
-
-# orddeparturedelays.parquet(partfour_parquet_path)
-
-# ord_dep_df= spark.read.parquet(partfour_parquet_path)
-# ord_dep_df.show(10)
 
 parquetPathres = "./spark-warehouse/parquet_path/new_parquet"
 
