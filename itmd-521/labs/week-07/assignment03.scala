@@ -1,9 +1,11 @@
+package main.scala.chapter4
+
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.types._
 import org.apache.spark.sql.functions._
 
 object Flightdelay {
-def main(args: Array[String]) {
+    def main(args: Array[String]) {
 
 val spark = SparkSession
 .builder
@@ -51,5 +53,6 @@ when(col("delay") > 360, "Very Long Delays")
 .orderBy("origin", col("delay").desc())
 .show(10)
 
-
+    }
+}
 
