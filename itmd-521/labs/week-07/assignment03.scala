@@ -7,10 +7,10 @@ import org.apache.spark.sql.functions._
 object Flightdelay {
     def main(args: Array[String]) {
 
-val spark = SparkSession
+val spark = (SparkSession
 .builder
 .appName("Flightdelay")
-.getOrCreate()
+.getOrCreate())
 
 // Path to data set
 val csv_file = "../../../../LearningSparkV2/databricks-datasets/learning-spark-v2/flights/departuredelays.csv"
