@@ -46,6 +46,7 @@ Place required screenshot
 ![partoneq3](./images/partoneq3.png "partoneq3")
 
 
+
 ## Assignment Details - Part II
 
 - From page 90-92, you will create a Table named `us_delay_flights_tbl` from the departuredelay.csv
@@ -56,8 +57,9 @@ Place required screenshot
 ### Part II - Screenshot
 
 ![ss](./Images/ss.png "ss")
-![travel](./Images/travel.jpg "travel")
-![travel](./Images/travel.jpg "travel")
+![ss](./Images/parttwopy.png "ss")
+
+
 ## Assignment Details - Part III
 
 Using the file: `learning-spark-v2 > flights > departuredelays.csv`
@@ -80,8 +82,8 @@ Using the `departuredelays` parquet file you created part III, read the content 
 ### Part IV - Screenshot
 
 
-![*scala*](./Images/part4scala.png"scala")
-
+![*scala*](./Images/part4scala.png "scala")
+![*scala*](./Images/part4py.png "python")
 
 
 ### Deliverable
