@@ -41,9 +41,9 @@ Using the departuredelays.csv file, in a single file called assignment-03.py con
 
 Place required screenshot
 
-![*partone*](./images/partone.jpg "partonepy")
-
-![partoneq3](./images/partoneq3.jpg "partoneq3")
+![*partone*](./images/partone.png "partonepy")
+![parttwoass](./images/parttwoass.png "parttwoass")
+![partoneq3](./images/partoneq3.png "partoneq3")
 
 
 ## Assignment Details - Part II
@@ -55,7 +55,7 @@ Place required screenshot
 
 ### Part II - Screenshot
 
-![parttwoass](./images/partone.png "parttwoass")
+![ss](./Images/ss.png "ss")
 ![travel](./Images/travel.jpg "travel")
 ![travel](./Images/travel.jpg "travel")
 ## Assignment Details - Part III
@@ -79,8 +79,10 @@ Using the `departuredelays` parquet file you created part III, read the content 
 
 ### Part IV - Screenshot
 
-![ss](./Images/ss.jpg "ss")
-![travel](./Images/travel.jpg "travel")
+
+![*scala*](./Images/part4scala.png"scala")
+
+
 
 ### Deliverable
 
