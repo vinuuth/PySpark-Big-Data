@@ -16,13 +16,13 @@ if __name__ == "__main__":
 csv_file = "../../../../LearningSparkV2/databricks-datasets/learning-spark-v2/flights/departuredelays.csv"
 
 #fly_schema = "date STRING, delay INT, distance INT, origin STRING, destination STRING"
-fly_schema= StructType([StructField('date', StringType(), True),
+fy_schema= StructType([StructField('date', StringType(), True),
                      StructField('delay', StringType(), True),
                      StructField('distance', IntegerType(), True),
                      StructField('origin', StringType(), True),                  
                      StructField('destination', StringType(), True)])     
                      
-fly_df = spark.read.csv(csv_file, header = True, schema = fly_schema)
+fly_df = spark.read.csv(csv_file, header = True, schema = fy_schema)
 fly_df.show()
 
 
@@ -84,7 +84,7 @@ fly_df.write.format("json").mode("overwrite"),option("compression", "none").json
 
 
 snappy_path = "./snappy_json"
-fly_df.write.format("json").mode("overwrite").option("compression", "lz4").save(snappy_json_path)
+fly_df.write.format("json").mode("overwrite").option("compression", "lz4").save(snappy_path)
 
 
 parquet_path ="./spark-warehouse"
