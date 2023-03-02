@@ -86,21 +86,14 @@ fli_df.write.format("parquet").mode("overwrite").parquet(parquett_path)
 
 //Assignment part 4
 
-// val par_path = "./spark-warehouse/parquet_path/new_parquet"
+val fli_df = spark.read.parquet(parquett_path)
+val flight_ord_df = fli_df.select("*").where(col("origin") === "ORD")
+val ord_parquet_path = "./spark-warehouse/new_parquet_path"
+val orddeparturedelays = flight_ord_df.write.mode("overwrite")
+orddeparturedelays.parquet(ord_parquet_path)
+val dep_df = spark.read.parquet(ord_parquet_path)
+dep_df.show(10)
 
-// val part_fourDF = spark.read.format("parquet").load(par_path)
-
-// val orddeparturedelays = part_fourDF.filter(col("origin") === "ORD")
-
-// orddeparturedelays.write.format("parquet").mode("overwrite").save(par_path)
-
-// orddeparturedelays.show(10)
-
-val parquetPathres = "./spark-warehouse/parquet_path"
-val part_fourDF = spark.read.format("parquet").load(parquetPathres)
-val orddeparturedelays = part_fourDF.filter(col("origin") === "ORD")
-orddeparturedelays.write.format("parquet").mode("overwrite").save(parquetPathres)
-orddeparturedelays.show(10)
 
 
 
