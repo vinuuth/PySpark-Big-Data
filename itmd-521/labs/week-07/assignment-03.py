@@ -101,4 +101,13 @@ fly_df.write.format("parquet").mode("overwrite").parquet(parquet_path)
 partfour_df= spark.read.parquet(parquet_path)
 partfour_df.select("*").where(col("origin")== 'ORD').show(10)
 
+partfour_parquet_path="./spark-warehouse/partfour_parquet_path"
+
+orddeparturedelays = partfour_df.write.mode("overwrite")
+
+orddeparturedelays.parquet(partfour_parquet_path)
+
+ord_df= spark.read.parquet(partfour_parquet_path)
+ord_df.show(10)
+
 
