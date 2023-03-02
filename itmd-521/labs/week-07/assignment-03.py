@@ -99,6 +99,6 @@ fly_df.write.format("parquet").mode("overwrite").parquet(parquet_path)
 # Save as type Parquet
 
 partfour_df= spark.read.parquet(parquet_path)
-partfour_df.select("origin").where(col("origin")== 'ORD').show(10)
+partfour_df.select("*").where(col("origin")== 'ORD').show(10)
 
 
