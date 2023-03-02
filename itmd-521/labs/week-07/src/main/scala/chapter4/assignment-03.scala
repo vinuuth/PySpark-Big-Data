@@ -88,7 +88,7 @@ fli_df.write.format("parquet").mode("overwrite").parquet(parquet_path)
 
 val parquetPathres = "./spark-warehouse/parquet_path/new_parquet"
 
-val part_fourDF = spark.read.format("parquet").load(parquetPath)
+val part_fourDF = spark.read.format("parquet").load(parquetPathres)
 
 val orddeparturedelays = part_fourDF.filter(col("origin") === "ORD")
 
