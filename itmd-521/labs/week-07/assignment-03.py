@@ -97,18 +97,29 @@ fly_df.write.format("parquet").mode("overwrite").parquet(parquet_path)
 
 # Use a .show(10) function to print out the first 10 lines, and take a screenshot
 # Save as type Parquet
-from pyspark.sql.functions import col
-partfour_df= spark.read.parquet(parquet_path)
-ord_df = partfour_df.select("*").where(col('origin') == 'ORD')
-#ord_df.show(10)
 
-partfour_parquet_path="./spark-warehouse/partfour_parquet_path"
 
-orddeparturedelays = partfour_df.write.mode("overwrite")
+# from pyspark.sql.functions import col
+# partfour_df= spark.read.parquet(parquet_path)
+# ord_df = partfour_df.select("*").where(col('origin') == 'ORD')
+# #ord_df.show(10)
 
-orddeparturedelays.parquet(partfour_parquet_path)
+# partfour_parquet_path="./spark-warehouse/partfour_parquet_path"
 
-ord_dep_df= spark.read.parquet(partfour_parquet_path)
-ord_dep_df.show(10)
+# orddeparturedelays = partfour_df.write.mode("overwrite")
 
+# orddeparturedelays.parquet(partfour_parquet_path)
+
+# ord_dep_df= spark.read.parquet(partfour_parquet_path)
+# ord_dep_df.show(10)
+
+parquetPathres = "./spark-warehouse/parquet_path"
+
+part_fourDF = spark.read.format("parquet").load(parquet_path)
+
+orddeparturedelays = part_fourDF.filter(col("origin") == "ORD")
+
+orddeparturedelays.write.format("parquet").mode("overwrite").save(parquetPathres)
+
+orddeparturedelays.show(10)
 
