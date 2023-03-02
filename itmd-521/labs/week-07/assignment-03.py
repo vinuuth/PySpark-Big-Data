@@ -22,21 +22,21 @@ fly_schema= StructType([StructField('date', StringType(), True),
                      StructField('origin', StringType(), True),                  
                      StructField('destination', StringType(), True)])     
                      
-fy_df = spark.read.csv(csv_file, header = True, schema = fly_schema)
-fy_df.show()
+fly_df = spark.read.csv(csv_file, header = True, schema = fly_schema)
+fly_df.show()
 
 
 
 #Assignment part 1
 
-(fy_df.select("distance", "origin", "destination")
+(fly_df.select("distance", "origin", "destination")
  .where(col("distance") > 1000)
  .orderBy(desc("distance"))).show(10)
 
 
 
 
-(fy_df.select("date", "delay", "origin", "destination") \
+(fly_df.select("date", "delay", "origin", "destination") \
     .where((col("delay") > 120) & (col("origin") == "SFO") & (col("destination") == "ORD")) \
     .orderBy(col("delay").desc()) \
     .limit(10)).show()
@@ -44,7 +44,7 @@ fy_df.show()
 
 
 
-(fy_df.select("delay", "origin", "destination", 
+(fly_df.select("delay", "origin", "destination", 
             when(col("delay") > 360, "Very Long Delays")
             .when((col("delay") > 120) & (col("delay") < 360), "Long Delays")
             .when((col("delay") > 60) & (col("delay") < 120), "Short Delays")
@@ -63,13 +63,13 @@ fy_df.show()
 
 #schema="date STRING, delay INT, distance INT, origin STRING, destination STRING"
 
-fy_df = fy_df.withColumn("dateMonth", from_unixtime(unix_timestamp(fy_df.date, "MMddHHmm"), "MM")).withColumn("dateDay", from_unixtime(unix_timestamp(fy_df.date, "MMddHHmm"), "dd"))
+fly_df = fly_df.withColumn("dateMonth", from_unixtime(unix_timestamp(fly_df.date, "MMddHHmm"), "MM")).withColumn("dateDay", from_unixtime(unix_timestamp(fly_df.date, "MMddHHmm"), "dd"))
 
 # Schema as defined in the preceding example
 
-#fy_df.write.saveAsTable("us_delay_flights_tbl")
+#fly_df.write.saveAsTable("us_delay_flights_tbl")
 
-fy_df.write.option("path","./spark-warehouse").mode("overwrite").saveAsTable("us_delay_flights_tbl")
+fly_df.write.option("path","./spark-warehouse").mode("overwrite").saveAsTable("us_delay_flights_tbl")
 query= "SELECT dateMonth, dateDay, delay, origin, destination FROM us_delay_flights_tbl WHERE origin ='ORD' AND dateMonth = 3 AND dateDay >= 1 AND dateDay <= 15 ORDER BY delay DESC LIMIT 5;"
 sol_query_df= spark.sql(query)
 
@@ -80,12 +80,12 @@ spark.sql("SELECT * FROM us_delay_flights_tbl_tmp_view").show()
 #Assignment part 3
 
 json_path="./spark-warehouse"
-fy_df.write.format("json").mode("overwrite"),option("compression", "none").json(json_path)
+fly_df.write.format("json").mode("overwrite"),option("compression", "none").json(json_path)
 
 
 snappy_path = "./snappy_json"
-fy_df.write.format("json").mode("overwrite").option("compression", "lz4").save(snappy_json_path)
+fly_df.write.format("json").mode("overwrite").option("compression", "lz4").save(snappy_json_path)
 
 
 parquet_path ="./spark-warehouse"
-fy_df.write.format("parquet").mode("overwrite").parquet(parquet_path)
+fly_df.write.format("parquet").mode("overwrite").parquet(parquet_path)
