@@ -113,7 +113,7 @@ fly_df.write.format("parquet").mode("overwrite").parquet(parquet_path)
 # ord_dep_df= spark.read.parquet(partfour_parquet_path)
 # ord_dep_df.show(10)
 
-parquetPathres = "./spark-warehouse/parquet_path"
+parquetPathres = "./spark-warehouse/parquet_path/new_parquet"
 
 part_fourDF = spark.read.format("parquet").load(parquet_path)
 
