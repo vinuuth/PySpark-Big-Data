@@ -56,8 +56,8 @@ Place required screenshot
 
 ### Part II - Screenshot
 
-![*ss*](./Images/ss.png "ss")
-![*parttwopy*](./Images/parttwopy.png "parttwopy")
+![*ss*](./images/ss.png "ss")
+![*parttwopy*](./images/parttwopy.png "parttwopy")
 
 
 ## Assignment Details - Part III
@@ -82,8 +82,8 @@ Using the `departuredelays` parquet file you created part III, read the content 
 ### Part IV - Screenshot
 
 
-![*scala*](./Images/part4scala.png "scala")
-![*python*](./Images/part4py.png "python")
+![*scala*](./images/part4scala.png "scala")
+![*python*](./images/part4py.png "python")
 
 
 ### Deliverable
