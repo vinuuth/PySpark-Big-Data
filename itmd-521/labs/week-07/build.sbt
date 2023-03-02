@@ -1,5 +1,5 @@
 //name of the package
-name := "main/scala/chapter3"
+name := "main/scala/chapter4"
 //version of our package
 version := "1.0"
 //version of Scala
