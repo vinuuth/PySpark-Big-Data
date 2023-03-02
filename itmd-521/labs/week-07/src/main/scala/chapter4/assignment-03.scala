@@ -28,6 +28,8 @@ val fli_df = spark.read.schema(fy_schema).csv(csv_file)
 
 fli_df.show()
 
+
+//Assignment part 1
 //For the first query
 fli_df.select("distance", "origin", "destination")
  .filter(col("distance") > (1000))
@@ -51,6 +53,28 @@ fli_df.select(col("delay"), col("origin"), col("destination"),
     .alias("Flight_Delays"))
     .orderBy(col("origin"), desc("delay"))
     .show(10)
+
+
+// Assignment part 2
+val fly_date_df = fly_df.withColumn("dateMonth", from_unixtime(unix_timestamp(col("date"), "MMddHHmm"), "MM")).withColumn("dateDay", from_unixtime(unix_timestamp(col("date"), "MMddHHmm"), "dd"))
+
+fly_date_df.write.option("path","/home/vagrant//vbengaluruprabhudev/itmd-521/labs/week-07/spark-warehouse").mode("overwrite").saveAsTable("us_delay_flights_tbl")
+
+val query= "SELECT dateMonth, dateDay, delay, origin, destination FROM us_delay_flights_tbl WHERE origin ='ORD' AND dateMonth = 3 AND dateDay >= 1 AND dateDay <= 15 ORDER BY delay DESC LIMIT 5;"
+val sol_query_df = spark.sql(query)
+
+sol_query_df.createOrReplaceTempView("us_delay_flights_tbl_tmp_view")
+spark.sql("SELECT * FROM us_delay_flights_tbl_tmp_view").show()
+
+
+
+
+
+
+
+
+
+
 
     }
 }
