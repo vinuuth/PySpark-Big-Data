@@ -79,15 +79,15 @@ spark.sql("SELECT * FROM us_delay_flights_tbl_tmp_view").show()
 
 #Assignment part 3
 
-json_path="./spark-warehouse"
-fly_df.write.format("json").mode("overwrite"),option("compression", "none").json(json_path)
+json_path="./spark-warehouse/json_path"
+fly_df.write.format("json").mode("overwrite").option("compression", "none").json(json_path)
 
 
-snappy_path = "./snappy_json"
+snappy_path = "./spark-warehouse/json_path./snappy_path"
 fly_df.write.format("json").mode("overwrite").option("compression", "lz4").save(snappy_path)
 
 
-parquet_path ="./spark-warehouse"
+parquet_path ="./spark-warehouse/parquet_path"
 fly_df.write.format("parquet").mode("overwrite").parquet(parquet_path)
 
 
