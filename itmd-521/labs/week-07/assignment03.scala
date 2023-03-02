@@ -24,25 +24,25 @@ StructField("origin", StringType, true),
 StructField("destination", StringType, true)
 ))
 
-val fly_df = spark.read.schema(fy_schema).csv(csv_file)
+val flight-df = spark.read.schema(fy_schema).csv(csv_file)
 
-fly_df.show()
+flight-df.show()
 
 //For the first query
-fly_df.select("distance", "origin", "destination")
-.where(col("distance") > 1000)
+flight-df.select("distance", "origin", "destination")
+.filter(col("distance") > (1000))
 .orderBy(desc("distance"))
 .show(10)
 
 // For the second query
-fly_df.select("date", "delay", "origin", "destination")
+flight-df.select("date", "delay", "origin", "destination")
 .where((col("delay") > 120) && (col("origin") === "SFO") && (col("destination") === "ORD"))
 .orderBy(col("delay").desc())
 .limit(10)
 .show()
 
 // // For the third query
-// fly_df.select("delay", "origin", "destination",
+// flight-df.select("delay", "origin", "destination",
 // when(col("delay") > 360, "Very Long Delays")
 // .when((col("delay") > 120) && (col("delay") < 360), "Long Delays")
 // .when((col("delay") > 60) && (col("delay") < 120), "Short Delays")
