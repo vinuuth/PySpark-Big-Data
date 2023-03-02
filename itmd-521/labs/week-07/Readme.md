@@ -57,7 +57,7 @@ Place required screenshot
 ### Part II - Screenshot
 
 ![ss](./Images/ss.png "ss")
-![ss](./Images/parttwopy.png "ss")
+![parttwopy](./Images/parttwopy.png "parttwopy")
 
 
 ## Assignment Details - Part III
