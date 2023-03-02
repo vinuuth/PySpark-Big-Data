@@ -75,3 +75,17 @@ sol_query_df= spark.sql(query)
 
 sol_query_df.createOrReplaceTempView("us_delay_flights_tbl_tmp_view")
 spark.sql("SELECT * FROM us_delay_flights_tbl_tmp_view").show()
+
+
+#Assignment part 3
+
+json_path="./spark-warehouse"
+fy_df.write.format("json").mode("overwrite"),option("compression", "none").json(json_path)
+
+
+snappy_json_path = "./snappyjson"
+fy_df.write.format("json").mode("overwrite").option("compression", "lz4").save(snappy_json_path)
+
+
+parquet_path ="./spark-warehouse"
+fy_df.write.format("parquet").mode("overwrite").parquet(parquet_path)
