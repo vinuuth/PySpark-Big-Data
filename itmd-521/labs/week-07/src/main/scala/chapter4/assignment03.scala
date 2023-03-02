@@ -36,22 +36,22 @@ flight_df.select("distance", "origin", "destination")
 
 // For the second query
 flight_df.select("date", "delay", "origin", "destination")
-.where((col("delay") > 120) && (col("origin") === "SFO") && (col("destination") === "ORD"))
+.filter((col("delay") > 120) && (col("origin") === "SFO") && (col("destination") === "ORD"))
 .orderBy(col("delay").desc())
 .limit(10)
 .show()
 
-// // For the third query
-// flight-df.select("delay", "origin", "destination",
-// when(col("delay") > 360, "Very Long Delays")
-// .when((col("delay") > 120) && (col("delay") < 360), "Long Delays")
-// .when((col("delay") > 60) && (col("delay") < 120), "Short Delays")
-// .when((col("delay") > 0) && (col("delay") < 60), "Tolerable Delays")
-// .when(col("delay") === 0, "No Delays")
-// .otherwise("Early")
-// .alias("Flight_Delays"))
-// .orderBy("origin", col("delay").desc())
-// .show(10)
+// For the third query
+flight-df.select("delay", "origin", "destination",
+when(col("delay") > 360, "Very Long Delays")
+.when((col("delay") > 120) && (col("delay") < 360), "Long Delays")
+.when((col("delay") > 60) && (col("delay") < 120), "Short Delays")
+.when((col("delay") > 0) && (col("delay") < 60), "Tolerable Delays")
+.when(col("delay") === 0, "No Delays")
+.otherwise("Early")
+.alias("Flight_Delays"))
+.orderBy("origin", col("delay").desc())
+.show(10)
 
     }
 }
