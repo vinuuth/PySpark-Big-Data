@@ -57,7 +57,7 @@ fli_df.select(col("delay"), col("origin"), col("destination"),
 
 // Assignment part 2
 
-import org.apache.spark.sql.functions._{from_unixtime, unix_timestamp}
+import org.apache.spark.sql.functions.{from_unixtime, unix_timestamp}
 val fly_date_df = fly_df.withColumn("dateMonth", from_unixtime(unix_timestamp(col("date"), "MMddHHmm"), "MM")).withColumn("dateDay", from_unixtime(unix_timestamp(col("date"), "MMddHHmm"), "dd"))
 
 fly_date_df.write.option("path","/home/vagrant//vbengaluruprabhudev/itmd-521/labs/week-07/spark-warehouse").mode("overwrite").saveAsTable("us_delay_flights_tbl")
