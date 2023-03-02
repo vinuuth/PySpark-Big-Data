@@ -40,7 +40,7 @@ fli_df.select("date", "delay", "origin", "destination")
  .orderBy(desc("delay"))
  .show(10)
 
-For the third query
+//For the third query
 fli_df.select("delay", "origin", "destination",
 when(col("delay") > 360, "Very Long Delays")
 .when((col("delay") > 120) && (col("delay") < 360), "Long Delays")
