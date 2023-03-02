@@ -41,15 +41,19 @@ fli_df.select("date", "delay", "origin", "destination")
  .show(10)
 
 //For the third query
-fli_df.select("delay", "origin", "destination",
-when(col("delay") > 360, "Very Long Delays")
-.when((col("delay") > 120) && (col("delay") < 360), "Long Delays")
-.when((col("delay") > 60) && (col("delay") < 120), "Short Delays")
-.when((col("delay") > 0) && (col("delay") < 60), "Tolerable Delays")
-.when(col("delay") === 0, "No Delays")
-.otherwise("Early")
-.alias("Flight_Delays"))
-.orderBy("origin", col("delay").desc())
+fli_df.select(
+  col("delay"), 
+  col("origin"), 
+  col("destination"),
+  when(col("delay") > 360, "Very Long Delays")
+    .when((col("delay") > 120) && (col("delay") < 360), "Long Delays")
+    .when((col("delay") > 60) && (col("delay") < 120), "Short Delays")
+    .when((col("delay") > 0) && (col("delay") < 60), "Tolerable Delays")
+    .when(col("delay") === 0, "No Delays")
+    .otherwise("Early")
+    .alias("Flight_Delays")
+)
+.orderBy(col("origin"), col("delay").desc())
 .show(10)
 
     }
