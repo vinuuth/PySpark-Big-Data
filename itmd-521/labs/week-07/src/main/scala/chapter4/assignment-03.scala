@@ -73,15 +73,20 @@ spark.sql("SELECT * FROM us_delay_flights_tbl_tmp_view").show()
 //Assignment part 3
 
 val json_path="./spark-warehouse/json_path"
-fly_df.write.format("json").mode("overwrite").option("compression", "none").json(json_path)
+fli_df.write.format("json").mode("overwrite").option("compression", "none").json(json_path)
 
 
 val snappy_path = "./spark-warehouse/snappy_path"
-fly_df.write.format("json").mode("overwrite").option("compression", "lz4").save(snappy_path)
+fli_df.write.format("json").mode("overwrite").option("compression", "lz4").save(snappy_path)
 
 
 val parquet_path ="./spark-warehouse/parquet_path"
-fly_df.write.format("parquet").mode("overwrite").parquet(parquet_path)
+fli_df.write.format("parquet").mode("overwrite").parquet(parquet_path)
+
+
+//Assignment part 4
+
+
 
 
 
