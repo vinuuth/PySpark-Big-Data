@@ -42,7 +42,7 @@ flight_df.select("date", "delay", "origin", "destination")
 .show()
 
 // For the third query
-flight-df.select("delay", "origin", "destination",
+flight_df.select("delay", "origin", "destination",
 when(col("delay") > 360, "Very Long Delays")
 .when((col("delay") > 120) && (col("delay") < 360), "Long Delays")
 .when((col("delay") > 60) && (col("delay") < 120), "Short Delays")
