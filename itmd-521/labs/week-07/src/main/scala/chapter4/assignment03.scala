@@ -18,7 +18,7 @@ val csv_file = "../../../../LearningSparkV2/databricks-datasets/learning-spark-v
 // Schema for flights data
 val fy_schema = StructType(Array(
 StructField("date", StringType, true),
-StructField("delay", StringType, true),
+StructField("delay", IntegerType, true),
 StructField("distance", IntegerType, true),
 StructField("origin", StringType, true),
 StructField("destination", StringType, true)
