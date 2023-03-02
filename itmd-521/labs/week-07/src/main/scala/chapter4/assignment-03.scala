@@ -86,8 +86,8 @@ fli_df.write.format("parquet").mode("overwrite").parquet(parquett_path)
 
 //Assignment part 4
 
-val fli_df = spark.read.parquet(parquett_path)
-val flight_ord_df = fli_df.select("*").where(col("origin") === "ORD")
+val fl_df = spark.read.parquet(parquett_path)
+val flight_ord_df = fl_df.select("*").where(col("origin") === "ORD")
 val ord_parquet_path = "./spark-warehouse/new_parquet_path"
 val orddeparturedelays = flight_ord_df.write.mode("overwrite")
 orddeparturedelays.parquet(ord_parquet_path)
