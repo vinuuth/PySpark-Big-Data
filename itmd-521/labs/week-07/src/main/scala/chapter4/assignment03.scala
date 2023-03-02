@@ -36,7 +36,7 @@ flight_df.select("distance", "origin", "destination")
 
 // For the second query
 flight_df.select("date", "delay", "origin", "destination")
-.filter((col("delay") > 120) && (col("origin") === "SFO") && (col("destination") === "ORD"))
+.filter(col("delay") > 120) && (col("origin") === "SFO") && (col("destination") === "ORD")
 .orderBy(col("delay").desc())
 .limit(10)
 .show()
