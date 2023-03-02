@@ -83,7 +83,7 @@ json_path="./spark-warehouse"
 fy_df.write.format("json").mode("overwrite"),option("compression", "none").json(json_path)
 
 
-snappy_json_path = "./snappyjson"
+snappy_path = "./snappy_json"
 fy_df.write.format("json").mode("overwrite").option("compression", "lz4").save(snappy_json_path)
 
 
