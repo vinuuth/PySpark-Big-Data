@@ -97,7 +97,7 @@ fly_df.write.format("parquet").mode("overwrite").parquet(parquet_path)
 
 # Use a .show(10) function to print out the first 10 lines, and take a screenshot
 # Save as type Parquet
-
+from pyspark.sql.functions import col
 partfour_df= spark.read.parquet(parquet_path)
 ord_df=partfour_df.select("*").where(col('origin') == 'ORD')
 ord_df.show(10)
