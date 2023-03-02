@@ -86,6 +86,15 @@ fli_df.write.format("parquet").mode("overwrite").parquet(parquet_path)
 
 //Assignment part 4
 
+val parquetPathres = "./spark-warehouse/parquet_path/new_parquet"
+
+val part_fourDF = spark.read.format("parquet").load(parquetPath)
+
+val orddeparturedelays = part_fourDF.filter(col("origin") === "ORD")
+
+orddeparturedelays.write.format("parquet").mode("overwrite").save(parquetPathres)
+
+orddeparturedelays.show(10)
 
 
 
