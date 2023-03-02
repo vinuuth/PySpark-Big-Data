@@ -67,9 +67,9 @@ fly_df = fly_df.withColumn("dateMonth", from_unixtime(unix_timestamp(fly_df.date
 
 # Schema as defined in the preceding example
 
-fly_df.write.saveAsTable("us_delay_flights_tbl")
+#fly_df.write.saveAsTable("us_delay_flights_tbl")
 
-#fly_df.write.option("path","./spark-warehouse").mode("overwrite").saveAsTable("us_delay_flights_tbl")
+fly_df.write.option("path","./spark-warehouse").mode("overwrite").saveAsTable("us_delay_flights_tbl")
 query= "SELECT dateMonth, dateDay, delay, origin, destination FROM us_delay_flights_tbl WHERE origin ='ORD' AND dateMonth = 3 AND dateDay >= 1 AND dateDay <= 15 ORDER BY delay DESC LIMIT 5;"
 sol_query_df= spark.sql(query)
 
