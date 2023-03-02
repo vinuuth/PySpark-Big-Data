@@ -91,3 +91,14 @@ parquet_path ="./spark-warehouse/parquet_path"
 fly_df.write.format("parquet").mode("overwrite").parquet(parquet_path)
 
 
+# Assignment part 4
+
+# Using the departuredelays parquet file you created part III, read the content into a DataFrame, select all records that have ORD (Chicago O'Hare as Origin) and write the results to a DataFrameWriter named orddeparturedelays
+
+# Use a .show(10) function to print out the first 10 lines, and take a screenshot
+# Save as type Parquet
+
+partfour_df= spark.read.parquet(parquet_path)
+partfour_df.select("origin").where(col("origin")== 'ORD').show(10)
+
+
