@@ -12,8 +12,14 @@ val spark = (SparkSession
 .appName("Flightdelay")
 .getOrCreate())
 
+    if (args.length < 1) {
+      print("Usage: flights <csv_file_dataset>")
+      sys.exit(1)
+    }
+
 // Path to data set
-val csv_file = "../../../../LearningSparkV2/databricks-datasets/learning-spark-v2/flights/departuredelays.csv"
+val csv_file = args(0)
+// val csv_file = "../../../../LearningSparkV2/databricks-datasets/learning-spark-v2/flights/departuredelays.csv"
 
 // Schema for flights data
 val fy_schema = StructType(Array(
