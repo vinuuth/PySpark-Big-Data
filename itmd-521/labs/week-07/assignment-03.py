@@ -4,16 +4,20 @@ from pyspark.sql.functions import *
 
 
 if __name__ == "__main__":
+ 
+    if len(sys.argv) != 2:
+        print("Usage: <file>", file=sys.stderr)
+        sys.exit(-1)
 
- spark = (SparkSession
+spark = (SparkSession
  .builder
  .appName("Flightdelay")
  .getOrCreate())
 
 
 # Path to data set
-
-csv_file = "../../../../LearningSparkV2/databricks-datasets/learning-spark-v2/flights/departuredelays.csv"
+ csv_file = sys.argv[1]
+# csv_file = "../../../../LearningSparkV2/databricks-datasets/learning-spark-v2/flights/departuredelays.csv"
 
 #fly_schema = "date STRING, delay INT, distance INT, origin STRING, destination STRING"
 fy_schema= StructType([StructField('date', StringType(), True),
