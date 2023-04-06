@@ -52,4 +52,4 @@ splitDF.show(5)
 # https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrameWriter.save.html
 splitDF.write.format("csv").mode("overwrite").option("header","true").save("s3a://itmd521/jrh-30-csv")
 #(splitDF.write.format("jdbc").option("url","jdbc:mysql://192.168.172.31:3306/ncdc").option("driver","com.mysql.jdbc.Driver").option("dbtable","fifties").option("user",os.getenv('MYSQLUSER')).option("password",os.getenv('MYSQLPASS')).save())
-#(splitDF.write.format("jdbc").option("url","jdbc:mysql://system31.service.consul:3306/ncdc").option("driver","com.mysql.cj.jdbc.Driver").option("dbtable","thirty").option("user","worker").option("truncate",True).mode("overwrite").option("password", "E53C55FE7AA3A917646ECAED5127A395219B40BFF15FB15816BC749FF4E572E5").save())
+#(splitDF.write.format("jdbc").option("url","jdbc:mysql://system31.service.consul:3306/ncdc").option("driver","com.mysql.cj.jdbc.Driver").option("dbtable","thirty").option("user","worker").option("truncate",True).mode("overwrite").option("password", "").save())
