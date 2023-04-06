@@ -18,7 +18,7 @@ conf.set('spark.hadoop.fs.s3a.aws.credentials.provider', 'org.apache.hadoop.fs.s
 conf.set("spark.hadoop.fs.s3a.endpoint", "http://10.0.0.50:9000")
 
 #spark = SparkSession.builder.appName("JRH insert 30 to mysql").config('spark.driver.host','192.168.172.45').config(conf=conf).getOrCreate()
-spark = SparkSession.builder.appName("JRH read 30").config('spark.driver.host','spark-edge-vm0.service.consul').config(conf=conf).getOrCreate()
+spark = SparkSession.builder.appName("VBP read 30").config('spark.driver.host','spark-edge-vm0.service.consul').config(conf=conf).getOrCreate()
 
 df = spark.read.csv('s3a://itmd521/30.txt')
 
@@ -52,4 +52,4 @@ splitDF.show(5)
 # https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrameWriter.save.html
 splitDF.write.format("csv").mode("overwrite").option("header","true").save("s3a://itmd521/jrh-30-csv")
 #(splitDF.write.format("jdbc").option("url","jdbc:mysql://192.168.172.31:3306/ncdc").option("driver","com.mysql.jdbc.Driver").option("dbtable","fifties").option("user",os.getenv('MYSQLUSER')).option("password",os.getenv('MYSQLPASS')).save())
-(splitDF.write.format("jdbc").option("url","jdbc:mysql://system31.service.consul:3306/ncdc").option("driver","com.mysql.cj.jdbc.Driver").option("dbtable","thirty").option("user","worker").option("truncate",True).mode("overwrite").option("password", "").save())
+#(splitDF.write.format("jdbc").option("url","jdbc:mysql://system31.service.consul:3306/ncdc").option("driver","com.mysql.cj.jdbc.Driver").option("dbtable","thirty").option("user","worker").option("truncate",True).mode("overwrite").option("password", "E53C55FE7AA3A917646ECAED5127A395219B40BFF15FB15816BC749FF4E572E5").save())
