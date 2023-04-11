@@ -7,21 +7,27 @@ from pyspark.sql.functions import to_date
 import os
 import sys
 
+# Required configuration to load S3/Minio access credentials securely - no hardcoding keys into code
 conf = SparkConf()
 conf.set('spark.jars.packages', 'org.apache.hadoop:hadoop-aws:3.2.0')
 conf.set('spark.hadoop.fs.s3a.aws.credentials.provider', 'org.apache.hadoop.fs.s3a.AnonymousAWSCredentialsProvider')
 
-#conf.set('spark.hadoop.fs.s3a.access.key', os.getenv('SECRETKEY'))
-#conf.set('spark.hadoop.fs.s3a.secret.key', os.getenv('ACCESSKEY'))
-#conf.set('spark.hadoop.fs.s3a.access.key', "spark521")
-#conf.set('spark.hadoop.fs.s3a.secret.key', "79a93eda-ba02-11ec-8a4c-54ee75516ff6")
-conf.set("spark.hadoop.fs.s3a.endpoint", "http://10.0.0.50:9000")
+conf.set('spark.hadoop.fs.s3a.access.key', os.getenv('SECRETKEY'))
+conf.set('spark.hadoop.fs.s3a.secret.key', os.getenv('ACCESSKEY'))
+conf.set("spark.hadoop.fs.s3a.endpoint", "http://minio1.service.consul:9000")
+conf.set("fs.s3a.path.style.access", "true")
+conf.set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
+conf.set("fs.s3a.connection.ssl.enabled", "false")
 
-#spark = SparkSession.builder.appName("JRH insert 30 to mysql").config('spark.driver.host','192.168.172.45').config(conf=conf).getOrCreate()
-spark = SparkSession.builder.appName("VBP read 30").config('spark.driver.host','spark-edge-vm0.service.consul').config(conf=conf).getOrCreate()
+# Create SparkSession Object - tell the cluster the FQDN of the host system)
+spark = SparkSession.builder.appName("VBP read minio test").config('spark.driver.host','spark-edge-vm0.service.consul').config(conf=conf).getOrCreate()
 
+# Read the datatype into a DataFrame
 df = spark.read.csv('s3a://itmd521/30.txt')
 
+# Custom code needed to split the original source -- it has a column based delimeter
+# Each record is a giant string - with predefined widths being the columns
+# Example: 0088999999949101950123114005+42550-092400SAO  +026599999V02015859008850609649N012800599-00504-00785999999EQDN01 00000JPWTH
 splitDF = df.withColumn('WeatherStation', df['_c0'].substr(5, 6)) \
 .withColumn('WBAN', df['_c0'].substr(11, 5)) \
 .withColumn('ObservationDate',to_date(df['_c0'].substr(16,8), 'yyyyMMdd')) \
@@ -42,14 +48,19 @@ splitDF = df.withColumn('WeatherStation', df['_c0'].substr(5, 6)) \
 .withColumn('AtmosphericPressure', df['_c0'].substr(100, 5).cast('float')/ 10) \
 .withColumn('APQualityCode', df['_c0'].substr(105, 1).cast(IntegerType())).drop('_c0')
 
+# The coalese() function
+# https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrame.coalesce.html
+# This will collapse your DataFrame into a single partition
 #writeDF = splitDF.coalesce(1)
 splitDF.printSchema()
 splitDF.show(5)
 
-#writeDF.write.format("csv").mode("overwrite").option("header","true").save("s3a://itmd521/50.csv")
-#splitDF.write.format("csv").mode("overwrite").option("header","true").save("s3a://hajek/50.csv")
+# This is the documentation for all DataFrameWriter types
+# https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrameWriter.html
+#https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrameWriter.parquet.html#pyspark.sql.DataFrameWriter.parquet
+splitDF.write.parquet("s3a://hajek/30-parquet")
+splitDF.write.csv("s3a://hajek/30-csv")
 
+# Writing out to MySQL your DataFrame results
 # https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrameWriter.save.html
-splitDF.write.format("csv").mode("overwrite").option("header","true").save("s3a://itmd521/jrh-30-csv")
-#(splitDF.write.format("jdbc").option("url","jdbc:mysql://192.168.172.31:3306/ncdc").option("driver","com.mysql.jdbc.Driver").option("dbtable","fifties").option("user",os.getenv('MYSQLUSER')).option("password",os.getenv('MYSQLPASS')).save())
-#(splitDF.write.format("jdbc").option("url","jdbc:mysql://system31.service.consul:3306/ncdc").option("driver","com.mysql.cj.jdbc.Driver").option("dbtable","thirty").option("user","worker").option("truncate",True).mode("overwrite").option("password", "").save())
+#(splitDF.write.format("jdbc").option("url","jdbc:mysql://system31.service.consul:3306/ncdc").option("driver","com.mysql.cj.jdbc.Driver").option("dbtable","thirty").option("user",os.getenv('MYSQLUSER')).option("truncate",True).mode("overwrite").option("password", os.getenv('MYSQLPASS')).save())
