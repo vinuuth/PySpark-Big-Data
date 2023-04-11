@@ -58,8 +58,8 @@ splitDF.show(5)
 # This is the documentation for all DataFrameWriter types
 # https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrameWriter.html
 #https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrameWriter.parquet.html#pyspark.sql.DataFrameWriter.parquet
-splitDF.write.parquet("s3a://hajek/30-parquet")
-splitDF.write.csv("s3a://hajek/30-csv")
+splitDF.write.parquet("s3a://vbp/30-parquet")
+splitDF.write.csv("s3a://vbp/30-csv")
 
 # Writing out to MySQL your DataFrame results
 # https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrameWriter.save.html
