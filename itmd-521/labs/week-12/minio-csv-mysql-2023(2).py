@@ -23,7 +23,7 @@ conf.set("fs.s3a.connection.ssl.enabled", "false")
 spark = SparkSession.builder.appName("VBP read minio test 50").config('spark.driver.host','spark-edge-vm0.service.consul').config(conf=conf).getOrCreate()
 
 # Read the datatype into a DataFrame
-df = spark.read.csv('s3a://vbengaluruprabhudev/50-parquet')
+df = spark.read.csv('s3a://itmd521/50-parquet')
 
 # Custom code needed to split the original source -- it has a column based delimeter
 # Each record is a giant string - with predefined widths being the columns
