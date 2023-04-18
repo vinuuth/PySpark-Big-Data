@@ -20,10 +20,10 @@ conf.set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
 conf.set("fs.s3a.connection.ssl.enabled", "false")
 
 # Create SparkSession Object - tell the cluster the FQDN of the host system)
-spark = SparkSession.builder.appName("VBP read minio test 30").config('spark.driver.host','spark-edge-vm0.service.consul').config(conf=conf).getOrCreate()
+spark = SparkSession.builder.appName("VBP read minio test 20").config('spark.driver.host','spark-edge-vm0.service.consul').config(conf=conf).getOrCreate()
 
 # Read the datatype into a DataFrame
-df = spark.read.csv('s3a://itmd521/30.txt')
+df = spark.read.csv('s3a://vbengaluruprabhudev/20-parquet')
 
 # Custom code needed to split the original source -- it has a column based delimeter
 # Each record is a giant string - with predefined widths being the columns
@@ -58,8 +58,8 @@ splitDF.show(5)
 # This is the documentation for all DataFrameWriter types
 # https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrameWriter.html
 #https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrameWriter.parquet.html#pyspark.sql.DataFrameWriter.parquet
-splitDF.write.parquet("s3a://vbp/30-parquet")
-splitDF.write.csv("s3a://vbp/30-csv")
+splitDF.write.parquet("s3a://vbengaluruprabhudev/20-parquet")
+splitDF.write.csv("s3a://vbengaluruprabhudev/20-csv")
 
 # Writing out to MySQL your DataFrame results
 # https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrameWriter.save.html
