@@ -1,3 +1,4 @@
+
 from pyspark import SparkConf
 from pyspark.sql import SparkSession
 from pyspark.sql.types import IntegerType
@@ -20,7 +21,7 @@ conf.set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
 conf.set("fs.s3a.connection.ssl.enabled", "false")
 
 # Create SparkSession Object - tell the cluster the FQDN of the host system)
-spark = SparkSession.builder.appName("VBP-minio-read-and-process-30.py").config('spark.driver.host','spark-edge-vm0.service.consul').config(conf=conf).getOrCreate()
+spark = SparkSession.builder.appName("VBP-minio-read-and-process-30").config('spark.driver.host','spark-edge-vm0.service.consul').config(conf=conf).getOrCreate()
 
 # Read the datatype into a DataFrame
 df = spark.read.csv('s3a://itmd521/30.txt')
