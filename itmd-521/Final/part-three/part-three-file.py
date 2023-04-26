@@ -21,10 +21,10 @@ conf.set("fs.s3a.connection.ssl.enabled", "false")
 
 # Create SparkSession Object - tell the cluster the FQDN of the host system)
 spark = SparkSession.builder.appName("VBP-part-three-and-process-50.py").config('spark.driver.host','spark-edge-vm0.service.consul').config(conf=conf).getOrCreate()
-parquet_file_60 =  "s3a://vbengaluru/50.parquet"
+parquet_file_50 =  "s3a://vbengaluru/50.parquet"
 spark.sql("set spark.sql.legacy.timeParserPolicy=LEGACY")
 
-parquet_dataframe_50 = spark.read.format("parquet").option("header", "true").option("inferSchema", "true").load(parquet_file_60)
+parquet_dataframe_50 = spark.read.format("parquet").option("header", "true").option("inferSchema", "true").load(parquet_file_50)
 parquet_dataframe_50.printSchema()
 
 parquet_dataframe_50.select("WeatherStation", "VisibilityDistance", "ObservationDate").where(col("VisibilityDistance") < 200).groupBy("WeatherStation", "VisibilityDistance", year("ObservationDate")).count().orderBy(desc("VisibilityDistance")).show(10)
