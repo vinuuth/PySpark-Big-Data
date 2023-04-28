@@ -9,7 +9,7 @@ import sys
 
 # Required configuration to load S3/Minio access credentials securely - no hardcoding keys into code
 conf = SparkConf()
-conf.set('spark.jars.packages', 'org.apache.hadoop:hadoop-aws:3.2.0')
+conf.set('spark.jars.packages', 'org.apache.hadoop:hadoop-aws:3.2.3')
 conf.set('spark.hadoop.fs.s3a.aws.credentials.provider', 'org.apache.hadoop.fs.s3a.AnonymousAWSCredentialsProvider')
 
 conf.set('spark.hadoop.fs.s3a.access.key', os.getenv('SECRETKEY'))
