@@ -1,7 +1,10 @@
 from pyspark import SparkConf
 from pyspark.sql import SparkSession
-from pyspark.sql.types import IntegerType
-from pyspark.sql.functions import to_date
+from pyspark.sql.functions import year
+from pyspark.sql.functions import *
+from pyspark.sql.types import *
+from pyspark.sql.functions import col
+from pyspark.sql.functions import desc
 
 # Removing hard coded password - using os module to import them
 import os
@@ -9,7 +12,7 @@ import sys
 
 # Required configuration to load S3/Minio access credentials securely - no hardcoding keys into code
 conf = SparkConf()
-conf.set('spark.jars.packages', 'org.apache.hadoop:hadoop-aws:3.2.0')
+conf.set('spark.jars.packages', 'org.apache.hadoop:hadoop-aws:3.2.3')
 conf.set('spark.hadoop.fs.s3a.aws.credentials.provider', 'org.apache.hadoop.fs.s3a.AnonymousAWSCredentialsProvider')
 
 conf.set('spark.hadoop.fs.s3a.access.key', os.getenv('SECRETKEY'))
@@ -20,11 +23,15 @@ conf.set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
 conf.set("fs.s3a.connection.ssl.enabled", "false")
 
 # Create SparkSession Object - tell the cluster the FQDN of the host system)
-spark = SparkSession.builder.appName("VBP-part-three-and-process-50.py").config('spark.driver.host','spark-edge-vm0.service.consul').config(conf=conf).getOrCreate()
-parquet_file_50 =  "s3a://vbengaluru/50.parquet"
+spark = SparkSession.builder.appName("VINU  read single part three csv data").config('spark.driver.host','spark-edge-vm0.service.consul').config(conf=conf).getOrCreate()
+
+
+parquet_file = "s3a://vbengaluruprabhudev/50-parquet"
 spark.sql("set spark.sql.legacy.timeParserPolicy=LEGACY")
 
-parquet_dataframe_50 = spark.read.format("parquet").option("header", "true").option("inferSchema", "true").load(parquet_file_50)
-parquet_dataframe_50.printSchema()
+dataFrame = spark.read.format("parquet").option("header", "true").option("inferSchema", "true").load(parquet_file)
+dataFrame.printSchema()
 
-parquet_dataframe_50.select("WeatherStation", "VisibilityDistance", "ObservationDate").where(col("VisibilityDistance") < 200).groupBy("WeatherStation", "VisibilityDistance", year("ObservationDate")).count().orderBy(desc("VisibilityDistance")).show(10)
+#find all of the weather station IDs that have registered days (count) of visibility less than 200 per year.
+query1 = dataFrame.select("WeatherStation","VisibilityDistance","ObservationDate").where((col("VisibilityDistance") < 200) & (col("WeatherStation") != 999999)).groupBy("WeatherStation","VisibilityDistance",year("ObservationDate")).count().orderBy(desc(year("ObservationDate")))
+query1.show(10)
