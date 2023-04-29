@@ -41,7 +41,7 @@ schema = StructType([StructField('WeatherStation', StringType(), True),
 	StructField('AtmosphericPressure', FloatType(), True),
 	StructField('APQualityCode', IntegerType(), True)])
 
-spark_session = SparkSession.builder.appName("VIN-minio-read-part-two").config('spark.driver.host','spark-edge-vm0.service.consul').config(conf=conf).getOrCreate()
+spark_session = SparkSession.builder.appName("VBP-minio-read-part-two").config('spark.driver.host','spark-edge-vm0.service.consul').config(conf=conf).getOrCreate()
 
 #Read partitioned csv
 df = spark_session.read.csv("s3a://vbengaluruprabhudev/30-csv", header=True, schema=schema)
