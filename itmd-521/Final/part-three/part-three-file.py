@@ -1,10 +1,7 @@
 from pyspark import SparkConf
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import year
-from pyspark.sql.functions import *
-from pyspark.sql.types import *
-from pyspark.sql.functions import col
-from pyspark.sql.functions import desc
+from pyspark.sql.types import IntegerType
+from pyspark.sql.functions import to_date
 
 # Removing hard coded password - using os module to import them
 import os
@@ -23,15 +20,24 @@ conf.set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
 conf.set("fs.s3a.connection.ssl.enabled", "false")
 
 # Create SparkSession Object - tell the cluster the FQDN of the host system)
-spark = SparkSession.builder.appName("VIN-read-50-parquet-thirdrun").config('spark.driver.host','spark-edge-vm0.service.consul').config(conf=conf).getOrCreate()
+spark = SparkSession.builder.appName("VIN-part-three-third-run").config('spark.driver.host','spark-edge-vm0.service.consul').config(conf=conf).getOrCreate()
 
+file = 's3a://vbengaluruprabhudev/50-parquet'
+df = spark.read.format("parquet").load(file)
+df.createOrReplaceTempView("PartThreeView")
 
-parquet_file = "s3a://vbengaluruprabhudev/50-parquet"
-spark.sql("set spark.sql.legacy.timeParserPolicy=LEGACY")
+# weather station IDs that have registered days (count) of visibility less than 200 per year.
+lessRegDays = spark.sql(""" SELECT distinct WeatherStation, ObsYear, count(WeatherStation) as CountWeatherStation 
+                        FROM 
 
-dataFrame = spark.read.format("parquet").option("header", "true").option("inferSchema", "true").load(parquet_file)
-dataFrame.printSchema()
+                        (SELECT distinct ObservationDate, WeatherStation, year(ObservationDate) as ObsYear
+                        FROM PartThreeView 
+                        WHERE VisibilityDistance < 200
+                        group by ObservationDate, WeatherStation)
 
-#find all of the weather station IDs that have registered days (count) of visibility less than 200 per year.
-query1 = dataFrame.select("WeatherStation","VisibilityDistance","ObservationDate").where((col("VisibilityDistance") < 200) & (col("WeatherStation") != 999999)).groupBy("WeatherStation","VisibilityDistance",year("ObservationDate")).count().orderBy(desc(year("ObservationDate")))
-query1.show(10)
+                        group by WeatherStation, ObsYear
+                        ORDER BY CountWeatherStation desc;
+                        """
+                        )
+
+lessRegDays.show(10)
