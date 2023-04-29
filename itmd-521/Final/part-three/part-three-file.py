@@ -20,7 +20,7 @@ conf.set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
 conf.set("fs.s3a.connection.ssl.enabled", "false")
 
 # Create SparkSession Object - tell the cluster the FQDN of the host system)
-spark = SparkSession.builder.appName("VIN-part-three-second-run").config('spark.driver.host','spark-edge-vm0.service.consul').config(conf=conf).getOrCreate()
+spark = SparkSession.builder.appName("VIN-part-three-first-run").config('spark.driver.host','spark-edge-vm0.service.consul').config(conf=conf).getOrCreate()
 
 file = 's3a://vbengaluruprabhudev/50-parquet'
 df = spark.read.format("parquet").load(file)
