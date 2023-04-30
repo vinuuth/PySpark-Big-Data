@@ -14,7 +14,7 @@ import os
 import sys
 
 #defining file to save answer
-queryAnswerFile = "s3a://vbengaluruprabhudev/MDG-part-four-answers-parquet"
+queryAnswerFile = "s3a://vbengaluruprabhudev/VBP-part-four-answers-parquet"
 
 # Required configuration to load S3/Minio access credentials securely - no hardcoding keys into code
 conf = SparkConf()
