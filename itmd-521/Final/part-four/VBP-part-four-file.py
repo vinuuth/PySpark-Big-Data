@@ -14,7 +14,7 @@ import os
 import sys
 
 #defining file to save answer
-queryAnswerFile = "s3a://vbengaluruprabhudev/VBP-part-four-ans-parquet"
+queryAnswerFile = "s3a://vbengaluruprabhudev/VBP-part-four-answers-parquet"
 
 # Required configuration to load S3/Minio access credentials securely - no hardcoding keys into code
 conf = SparkConf()
@@ -28,7 +28,7 @@ conf.set("fs.s3a.path.style.access", "true")
 conf.set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
 conf.set("fs.s3a.connection.ssl.enabled", "false")
 
-spark = SparkSession.builder.appName("VBP Part four-test").config('spark.driver.host','spark-edge-vm0.service.consul').config(conf=conf).getOrCreate()
+spark = SparkSession.builder.appName("VBP Part four").config('spark.driver.host','spark-edge-vm0.service.consul').config(conf=conf).getOrCreate()
 
 structSchema = StructType([StructField('WeatherStation', StringType(), True),
 StructField('WBAN', StringType(), True),
@@ -49,7 +49,6 @@ StructField('DewPoint', FloatType(), True),
 StructField('DPQualityCode', IntegerType(), True),
 StructField('AtmosphericPressure', FloatType(), True),
 StructField('APQualityCode', IntegerType(), True)])
-
 
 
 parquetdf = spark.read.parquet("s3a://vbengaluruprabhudev/50-parquet", header=True, schema=structSchema)   
@@ -104,8 +103,7 @@ lowestTempRecorded = spark.sql("""
                             group by AirTemperature, WeatherStation, Year
                             order by min_temp, row_number asc)
                             WHERE row_number = 1
-                            ORDER BY Year
-                            ;
+                            ORDER BY Year;
                             """
                             ).show(20)
 
@@ -124,7 +122,7 @@ highestTempRecorded = spark.sql("""
                             group by AirTemperature, WeatherStation, Year
                             order by max_temp, row_number asc)
                             WHERE row_number = 1
-                            ORDER BY Year
+                            ORDER BY Year;
                             """
                             ).show(20)
 
@@ -133,19 +131,51 @@ removeIllegalValues = spark.sql("""
                                 SELECT max(WeatherStation) as MaxWeatherStation, YEAR(ObservationDate) as ObservationDate , max(AirTemperature) MaxAirTemperature
                                 FROM weather 
                                 WHERE WeatherStation !=999999 AND AirTemperature !=999.9 
-                                GROUP BY YEAR(ObservationDate) ORDER BY max(AirTemperature)""").show(20)
+                                GROUP BY YEAR(ObservationDate) ORDER BY max(AirTemperature);
+                                """).show(20)
 
 
+querySchema7 = StructType([
+    StructField('MaxWeatherStation', StringType(), True),
+    StructField('ObservationDate', DateType(), True),
+    StructField('MaxAirTemperature', FloatType(), True)
+])
+removeIllegalValues.write.format('parquet').mode('overwrite').save(queryAnswerFile,schema=querySchema7)
 
 
-removeIllegalValues.write.parquet(queryAnswerFile, mode="append")
+querySchema6 = StructType([
+    StructField('WeatherStation', StringType(), True),
+    StructField('Year', DateType(), True),
+    StructField('max_temp', FloatType(), True)
+])
 
-highestTempRecorded.write.parquet(queryAnswerFile, mode="append")
+highestTempRecorded.write.format('parquet').mode('append').save(queryAnswerFile,schema=querySchema6)
 
-lowestTempRecorded.write.parquet(queryAnswerFile, mode="append")
+querySchema5 = StructType([
+    StructField('WeatherStation', StringType(), True),
+    StructField('Year', DateType(), True),
+    StructField('min_temp', FloatType(), True)
+])
 
-standardAirTemp.write.parquet(queryAnswerFile, mode="append")
+lowestTempRecorded.write.format('parquet').mode('append').save(queryAnswerFile,schema=querySchema5)
 
-averageAirTemp.write.parquet(queryAnswerFile, mode="append")
+querySchema4 = StructType([
+    StructField('Year', DateType(), True),
+    StructField('Standard_deviation', FloatType(), True)
+])
 
-countOfRecords.write.parquet(queryAnswerFile, mode="append")
+standardAirTemp.write.format('parquet').mode('append').save(queryAnswerFile,schema=querySchema4)
+
+querySchema3 = StructType([
+   StructField('Year', DateType(), True),
+   StructField('Standard_deviation', FloatType(), True)
+])
+
+averageAirTemp.write.format('parquet').mode('append').save(queryAnswerFile,schema=querySchema3)
+
+querySchema2=StructType([
+StructField('Year', DateType(), True),
+StructField('Count(1)', IntegerType(), True),
+])
+
+countOfRecords.write.format('parquet').mode('append').save(queryAnswerFile,schema=querySchema2)
