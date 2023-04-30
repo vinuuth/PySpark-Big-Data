@@ -70,7 +70,6 @@ schema_value = StructType([StructField('WeatherStation', StringType(), True),
         StructField('AtmosphericPressure', FloatType(), True),
         StructField('APQualityCode', IntegerType(), True)])
 
-<<<<<<< HEAD
 print("---------------Converting to PARQUET ---------------------------")
 cadf.write.format("parquet").option("header", "true").mode("overwrite").save("s3a://vbengaluruprabhudev/30-parttwo-parquet")
 parquetdf = spark_session.read.schema(schema).parquet("s3a://vbengaluruprabhudev/30-part2-parquet")
@@ -80,7 +79,6 @@ parquetdf.printSchema()
 #Displayschema
 print("Display PARQUETDF")
 parquetdf.show(10)
-=======
 
 # Read the partitioned CSV into CSV
 read_df = spark.read.csv('s3a://itmd521/30.txt', header=True, schema=schema_value)
@@ -94,4 +92,3 @@ jdbcDF = read_df.read.format("jdbc").option("url","jdbc:mysql://database-240-vm0
 jdbcDF.show()
 
 print(jdbcDF.schema)
->>>>>>> 4a2cb9b015363fe3a5e57a6c64d273f78ae7cb05
