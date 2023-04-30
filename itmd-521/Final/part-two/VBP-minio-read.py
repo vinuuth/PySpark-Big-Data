@@ -44,10 +44,10 @@ schema = StructType([StructField('WeatherStation', StringType(), True),
 spark_session = SparkSession.builder.appName("VBP-minio-read-part-two").config('spark.driver.host','spark-edge-vm0.service.consul').config(conf=conf).getOrCreate()
 
 #Read partitioned csv
-df = spark_session.read.csv("s3a://vbengaluruprabhudev/30-csv", header=True, schema=schema)
+cadf = spark_session.read.csv("s3a://vbengaluruprabhudev/30-csv", header=True, schema=schema)
 
 print("---------Converting to CSV--------")
-csvdf = df
+csvdf = cadf
 #Printschema
 print("Print CSV Schema")
 csvdf.printSchema()
@@ -56,7 +56,7 @@ print("Display CSVDF")
 csvdf.show(10)
 
 print("-----------Converting to JSON -----------------")
-df.write.format("json").option("header", "true").mode("overwrite").save("s3a://vbengaluruprabhudev/30-parttwo-json")
+cadf.write.format("json").option("header", "true").mode("overwrite").save("s3a://vbengaluruprabhudev/30-parttwo-json")
 jsondf = spark_session.read.schema(schema).json("s3a://vbengaluruprabhudev/30-part2-json")
 #Printschema
 print("Print JSON Schema")
@@ -66,7 +66,7 @@ print("Display JSONDF")
 jsondf.show(10)
 
 print("---------------Converting to PARQUET ---------------------------")
-df.write.format("parquet").option("header", "true").mode("overwrite").save("s3a://vbengaluruprabhudev/30-parttwo-parquet")
+cadf.write.format("parquet").option("header", "true").mode("overwrite").save("s3a://vbengaluruprabhudev/30-parttwo-parquet")
 parquetdf = spark_session.read.schema(schema).parquet("s3a://vbengaluruprabhudev/30-part2-parquet")
 #Printschema
 print("Print PARQUET Schema")
