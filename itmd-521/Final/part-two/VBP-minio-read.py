@@ -1,12 +1,20 @@
 from pyspark import SparkConf
 from pyspark.sql import SparkSession
-from pyspark.sql.types import *
+from pyspark.sql.types import IntegerType
 from pyspark.sql.functions import to_date
+from pyspark.sql.functions import col
+from pyspark.sql.functions import desc
+from pyspark.sql.functions import year
+from pyspark.sql.types import *
+from pyspark.sql.functions import *
+from pyspark.sql.functions import year, month, col
 
 # Removing hard coded password - using os module to import them
 import os
 import sys
- 
+
+#defining file to save answer
+queryAnswerFile = "s3a://vbengaluruprabhudev/MDG-part-four-answers-parquet"
 
 # Required configuration to load S3/Minio access credentials securely - no hardcoding keys into code
 conf = SparkConf()
@@ -20,66 +28,154 @@ conf.set("fs.s3a.path.style.access", "true")
 conf.set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
 conf.set("fs.s3a.connection.ssl.enabled", "false")
 
-# Create SparkSession Object - tell the cluster the FQDN of the host system)
-spark = SparkSession.builder.appName("VBP-minio-read-part2").config('spark.driver.host','spark-edge-vm0.service.consul').config(conf=conf).getOrCreate()
+spark = SparkSession.builder.appName("VBP Part four").config('spark.driver.host','spark-edge-vm0.service.consul').config(conf=conf).getOrCreate()
 
-df = spark.read.csv('s3a://itmd521/30.txt')
-
-# Custom code needed to split the original source -- it has a column based delimeter
-# Each record is a giant string - with predefined widths being the columns
-# Example: 0088999999949101950123114005+42550-092400SAO  +026599999V02015859008850609649N012800599-00504-00785999999EQDN01 00000JPWTH
-splitDF = df.withColumn('WeatherStation', df['_c0'].substr(5, 6)) \
-.withColumn('WBAN', df['_c0'].substr(11, 5)) \
-.withColumn('ObservationDate',to_date(df['_c0'].substr(16,8), 'yyyyMMdd')) \
-.withColumn('ObservationHour', df['_c0'].substr(24, 4).cast(IntegerType())) \
-.withColumn('Latitude', df['_c0'].substr(29, 6).cast('float') / 1000) \
-.withColumn('Longitude', df['_c0'].substr(35, 7).cast('float') / 1000) \
-.withColumn('Elevation', df['_c0'].substr(47, 5).cast(IntegerType())) \
-.withColumn('WindDirection', df['_c0'].substr(61, 3).cast(IntegerType())) \
-.withColumn('WDQualityCode', df['_c0'].substr(64, 1).cast(IntegerType())) \
-.withColumn('SkyCeilingHeight', df['_c0'].substr(71, 5).cast(IntegerType())) \
-.withColumn('SCQualityCode', df['_c0'].substr(76, 1).cast(IntegerType())) \
-.withColumn('VisibilityDistance', df['_c0'].substr(79, 6).cast(IntegerType())) \
-.withColumn('VDQualityCode', df['_c0'].substr(86, 1).cast(IntegerType())) \
-.withColumn('AirTemperature', df['_c0'].substr(88, 5).cast('float') /10) \
-.withColumn('ATQualityCode', df['_c0'].substr(93, 1).cast(IntegerType())) \
-.withColumn('DewPoint', df['_c0'].substr(94, 5).cast('float')) \
-.withColumn('DPQualityCode', df['_c0'].substr(99, 1).cast(IntegerType())) \
-.withColumn('AtmosphericPressure', df['_c0'].substr(100, 5).cast('float')/ 10) \
-.withColumn('APQualityCode', df['_c0'].substr(105, 1).cast(IntegerType())).drop('_c0')
+structSchema = StructType([StructField('WeatherStation', StringType(), True),
+StructField('WBAN', StringType(), True),
+StructField('ObservationDate',  DateType(), True),
+StructField('ObservationHour', IntegerType(), True),
+StructField('Latitude', FloatType(), True),
+StructField('Longitude', FloatType(), True),
+StructField('Elevation', IntegerType(), True),
+StructField('WindDirection', IntegerType(), True),
+StructField('WDQualityCode', IntegerType(), True),
+StructField('SkyCeilingHeight', IntegerType(), True),
+StructField('SCQualityCode', IntegerType(), True),
+StructField('VisibilityDistance', IntegerType(), True),
+StructField('VDQualityCode', IntegerType(), True),
+StructField('AirTemperature', FloatType(), True),
+StructField('ATQualityCode', IntegerType(), True),
+StructField('DewPoint', FloatType(), True),
+StructField('DPQualityCode', IntegerType(), True),
+StructField('AtmosphericPressure', FloatType(), True),
+StructField('APQualityCode', IntegerType(), True)])
 
 
-schema_value = StructType([StructField('WeatherStation', StringType(), True),
-        StructField('WBAN', StringType(), True),
-        StructField('ObservationDate',  DateType(), True),
-        StructField('ObservationHour', IntegerType(), True),
-        StructField('Latitude', FloatType(), True),
+parquetdf = spark.read.parquet("s3a://vbengaluruprabhudev/50-parquet", header=True, schema=structSchema)   
+parquetdf.createOrReplaceTempView("weather")
+
+#Count the number of records
+countOfRecords = spark.sql(""" SELECT year(ObservationDate) As Year, count(*)
+                                    FROM weather
+                                    WHERE Month(ObservationDate) = '2'
+                                    group by Year
+                                    order by Year desc;
+                                 """
+                                ).show(100)
+
         
-        StructField('Longitude', FloatType(), True),
-        StructField('Elevation', IntegerType(), True),
-        StructField('WindDirection', IntegerType(), True),
-        StructField('WDQualityCode', IntegerType(), True),
-        StructField('SkyCeilingHeight', IntegerType(), True),
-        StructField('SCQualityCode', IntegerType(), True),
-        StructField('VisibilityDistance', IntegerType(), True),
-        StructField('VDQualityCode', IntegerType(), True),
-        StructField('AirTemperature', FloatType(), True),
-        StructField('ATQualityCode', FloatType(), True),
-        StructField('DewPoint', FloatType(), True),
-        StructField('DPQualityCode', IntegerType(), True),
-        StructField('AtmosphericPressure', FloatType(), True),
-        StructField('APQualityCode', IntegerType(), True)])
+#Average air temperature for month of February
+averageAirTemp = spark.sql("""  SELECT year(ObservationDate) As Year, AVG(AirTemperature) AS AvgAirTemperature
+                                FROM weather
+                                WHERE Month(ObservationDate) = '2'
+                                AND AirTemperature < 999 AND AirTemperature > -999
+                                group by Year
+                                order by Year desc;
+                                """
+                                ).show(100)
+
+                                   
+#Median air temperature for month of February
+medianAirTemp = parquetdf.approxQuantile('AirTemperature', [0.5], 0.25)
+print(f"Median air temmp:{medianAirTemp}")
+
+#Standard Deviation of air temperature for month of February
+standardAirTemp = spark.sql(""" SELECT year(ObservationDate) As Year, std(AirTemperature) as Standard_deviation
+                                    FROM weather
+                                    WHERE Month(ObservationDate) = '2'
+                                    AND AirTemperature < 999 AND AirTemperature > -999
+                                    group by Year
+                                    order by Year desc;
+                                 """
+                                ).show(100)
+
+#The weather station ID that has the lowest recorded temperature per year
+lowestTempRecorded = spark.sql(""" 
+                            SELECT WeatherStation, Year, min_temp
+                            FROM(
+                            SELECT
+                            DISTINCT (WeatherStation),
+                            YEAR(ObservationDate) AS Year, 
+                            MIN(AirTemperature) OVER (partition by YEAR(ObservationDate)) AS min_temp,
+                            ROW_NUMBER() OVER (partition by YEAR(ObservationDate) ORDER BY AirTemperature DESC) AS row_number
+                            FROM weather
+                            WHERE AirTemperature < 999 AND AirTemperature > -999
+                            group by AirTemperature, WeatherStation, Year
+                            order by min_temp, row_number asc)
+                            WHERE row_number = 1
+                            ORDER BY Year;
+                            """
+                            ).show(20)
+
+#The weather station ID that has the highest recorded temperature per year
+
+highestTempRecorded = spark.sql("""
+                            SELECT WeatherStation, Year, max_temp
+                            FROM(
+                            SELECT
+                            DISTINCT (WeatherStation),
+                            YEAR(ObservationDate) AS Year, 
+                            MAX(AirTemperature) OVER (partition by YEAR(ObservationDate)) AS max_temp,
+                            ROW_NUMBER() OVER (partition by YEAR(ObservationDate) ORDER BY AirTemperature ASC) AS row_number
+                            FROM weather
+                            WHERE AirTemperature < 999 AND AirTemperature > -999
+                            group by AirTemperature, WeatherStation, Year
+                            order by max_temp, row_number asc)
+                            WHERE row_number = 1
+                            ORDER BY Year;
+                            """
+                            ).show(20)
+
+#Removing illegal values form AirTemperature
+removeIllegalValues = spark.sql("""
+                                SELECT max(WeatherStation) as MaxWeatherStation, YEAR(ObservationDate) as ObservationDate , max(AirTemperature) MaxAirTemperature
+                                FROM weather 
+                                WHERE WeatherStation !=999999 AND AirTemperature !=999.9 
+                                GROUP BY YEAR(ObservationDate) ORDER BY max(AirTemperature);
+                                """).show(20)
 
 
-# Read the partitioned CSV into CSV
-read_df = spark.read.csv('s3a://itmd521/30.txt', header=True, schema=schema_value)
+querySchema7 = StructType([
+    StructField('MaxWeatherStation', StringType(), True),
+    StructField('ObservationDate', DateType(), True),
+    StructField('MaxAirTemperature', FloatType(), True)
+])
+removeIllegalValues.write.format('parquet').mode('overwrite').save(queryAnswerFile,schema=querySchema7)
 
 
-read_df.write.format("jdbc").option("url","jdbc:mysql://database-240-vm0.service.consul:3306/ncdc").option("driver","com.mysql.cj.jdbc.Driver").option("dbtable","VBP-thirties").option("user",os.getenv("MYSQLUSER")).option("truncate",True).mode("overwrite").option("password", os.getenv("MYSQLPASS")).save()
+querySchema6 = StructType([
+    StructField('WeatherStation', StringType(), True),
+    StructField('Year', DateType(), True),
+    StructField('max_temp', FloatType(), True)
+])
 
+highestTempRecorded.write.format('parquet').mode('append').save(queryAnswerFile,schema=querySchema6)
 
-jdbcDF = read_df.read.format("jdbc").option("url","jdbc:mysql://database-240-vm0.service.consul:3306/ncdc").option("driver","com.mysql.cj.jdbc.Driver").option("dbtable","VBP-thirties").option("user",os.getenv("MYSQLUSER")).option("truncate",True).mode("overwrite").option("password", os.getenv("MYSQLPASS")).load()
+querySchema5 = StructType([
+    StructField('WeatherStation', StringType(), True),
+    StructField('Year', DateType(), True),
+    StructField('min_temp', FloatType(), True)
+])
 
-jdbcDF.show()
+lowestTempRecorded.write.format('parquet').mode('append').save(queryAnswerFile,schema=querySchema5)
 
-print(jdbcDF.schema)
+querySchema4 = StructType([
+    StructField('Year', DateType(), True),
+    StructField('Standard_deviation', FloatType(), True)
+])
+
+standardAirTemp.write.format('parquet').mode('append').save(queryAnswerFile,schema=querySchema4)
+
+querySchema3 = StructType([
+   StructField('Year', DateType(), True),
+   StructField('Standard_deviation', FloatType(), True)
+])
+
+averageAirTemp.write.format('parquet').mode('append').save(queryAnswerFile,schema=querySchema3)
+
+querySchema2=StructType([
+StructField('Year', DateType(), True),
+StructField('Count(1)', IntegerType(), True),
+])
+
+countOfRecords.write.format('parquet').mode('append').save(queryAnswerFile,schema=querySchema2)
