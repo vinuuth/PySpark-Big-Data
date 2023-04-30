@@ -14,7 +14,7 @@ import os
 import sys
 
 #defining file to save answer
-queAnsFile = "s3a://vbengaluruprabhudev/VBP-part-four-ans-parquet"
+queryAnswerFile = "s3a://vbengaluruprabhudev/VBP-part-four-ans-parquet"
 
 # Required configuration to load S3/Minio access credentials securely - no hardcoding keys into code
 conf = SparkConf()
@@ -52,12 +52,12 @@ StructField('APQualityCode', IntegerType(), True)])
 
 
 
-parquetdf = spark.read.parquet("s3a://vbengaluruprabhudev/40-parquet", header=True, schema=structSchema)   
-parquetdf.createOrReplaceTempView("sqlView")
+parquetdf = spark.read.parquet("s3a://vbengaluruprabhudev/50-parquet", header=True, schema=structSchema)   
+parquetdf.createOrReplaceTempView("weather")
 
 #Count the number of records
-cntOfRec = spark.sql(""" SELECT year(ObservationDate) As Year, count(*)
-                                    FROM sqlView
+countOfRecords = spark.sql(""" SELECT year(ObservationDate) As Year, count(*)
+                                    FROM weather
                                     WHERE Month(ObservationDate) = '2'
                                     group by Year
                                     order by Year desc;
@@ -65,3 +65,87 @@ cntOfRec = spark.sql(""" SELECT year(ObservationDate) As Year, count(*)
                                 ).show(100)
 
         
+#Average air temperature for month of February
+averageAirTemp = spark.sql("""  SELECT year(ObservationDate) As Year, AVG(AirTemperature) AS AvgAirTemperature
+                                FROM weather
+                                WHERE Month(ObservationDate) = '2'
+                                AND AirTemperature < 999 AND AirTemperature > -999
+                                group by Year
+                                order by Year desc;
+                                """
+                                ).show(100)
+
+                                   
+#Median air temperature for month of February
+medianAirTemp = parquetdf.approxQuantile('AirTemperature', [0.5], 0.25)
+print(f"Median air temmp:{medianAirTemp}")
+
+#Standard Deviation of air temperature for month of February
+standardAirTemp = spark.sql(""" SELECT year(ObservationDate) As Year, std(AirTemperature) as Standard_deviation
+                                    FROM weather
+                                    WHERE Month(ObservationDate) = '2'
+                                    AND AirTemperature < 999 AND AirTemperature > -999
+                                    group by Year
+                                    order by Year desc;
+                                 """
+                                ).show(100)
+
+#The weather station ID that has the lowest recorded temperature per year
+lowestTempRecorded = spark.sql(""" 
+                            SELECT WeatherStation, Year, min_temp
+                            FROM(
+                            SELECT
+                            DISTINCT (WeatherStation),
+                            YEAR(ObservationDate) AS Year, 
+                            MIN(AirTemperature) OVER (partition by YEAR(ObservationDate)) AS min_temp,
+                            ROW_NUMBER() OVER (partition by YEAR(ObservationDate) ORDER BY AirTemperature DESC) AS row_number
+                            FROM weather
+                            WHERE AirTemperature < 999 AND AirTemperature > -999
+                            group by AirTemperature, WeatherStation, Year
+                            order by min_temp, row_number asc)
+                            WHERE row_number = 1
+                            ORDER BY Year
+                            ;
+                            """
+                            ).show(20)
+
+#The weather station ID that has the highest recorded temperature per year
+
+highestTempRecorded = spark.sql("""
+                            SELECT WeatherStation, Year, max_temp
+                            FROM(
+                            SELECT
+                            DISTINCT (WeatherStation),
+                            YEAR(ObservationDate) AS Year, 
+                            MAX(AirTemperature) OVER (partition by YEAR(ObservationDate)) AS max_temp,
+                            ROW_NUMBER() OVER (partition by YEAR(ObservationDate) ORDER BY AirTemperature ASC) AS row_number
+                            FROM weather
+                            WHERE AirTemperature < 999 AND AirTemperature > -999
+                            group by AirTemperature, WeatherStation, Year
+                            order by max_temp, row_number asc)
+                            WHERE row_number = 1
+                            ORDER BY Year
+                            """
+                            ).show(20)
+
+#Removing illegal values form AirTemperature
+removeIllegalValues = spark.sql("""
+                                SELECT max(WeatherStation) as MaxWeatherStation, YEAR(ObservationDate) as ObservationDate , max(AirTemperature) MaxAirTemperature
+                                FROM weather 
+                                WHERE WeatherStation !=999999 AND AirTemperature !=999.9 
+                                GROUP BY YEAR(ObservationDate) ORDER BY max(AirTemperature)""").show(20)
+
+
+
+
+removeIllegalValues.write.parquet(queryAnswerFile, mode="append")
+
+highestTempRecorded.write.parquet(queryAnswerFile, mode="append")
+
+lowestTempRecorded.write.parquet(queryAnswerFile, mode="append")
+
+standardAirTemp.write.parquet(queryAnswerFile, mode="append")
+
+averageAirTemp.write.parquet(queryAnswerFile, mode="append")
+
+countOfRecords.write.parquet(queryAnswerFile, mode="append")
