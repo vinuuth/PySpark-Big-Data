@@ -168,9 +168,8 @@ querySchema5 = StructType([
 
 lowestTempRecorded.write.format('parquet').mode('append').save(queryAnswerFile,schema=querySchema5)
 
-<<<<<<< HEAD
+
 print(jdbcDF.schema)
-=======
 querySchema4 = StructType([
     StructField('Year', DateType(), True),
     StructField('Standard_deviation', FloatType(), True)
@@ -191,4 +190,4 @@ StructField('Count(1)', IntegerType(), True),
 ])
 
 countOfRecords.write.format('parquet').mode('append').save(queryAnswerFile,schema=querySchema2)
->>>>>>> 0e9d0a8cee2e4df5652dee0594ca50918de5197d
+
