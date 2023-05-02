@@ -44,7 +44,7 @@ structSchema =  StructType([StructField('WeatherStation', StringType(), True),
                     StructField('DPQualityCode', DoubleType(), True),
                     StructField('AtmosphericPressure', FloatType(), True)])
 
-dataFrame = spark.read.csv("s3a://vbengaluruprabhudev/30-csv", header=True, schema=structSchema)
+dataFrame = spark.read.csv("s3a://vbengaluruprabhudev/30-csv",header=True, schema=structSchema)
  
 csvdf = dataFrame
 
