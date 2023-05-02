@@ -1,20 +1,20 @@
 from pyspark import SparkConf
 from pyspark.sql import SparkSession
-from pyspark.sql.types import IntegerType
+from pyspark.sql.types import IntegerType,StructType, StructField,DateType, FloatType, DoubleType, StringType
 from pyspark.sql.functions import to_date
 from pyspark.sql.functions import col
 from pyspark.sql.functions import desc
 from pyspark.sql.functions import year
 from pyspark.sql.types import *
 from pyspark.sql.functions import *
-from pyspark.sql.functions import year, month, col
+from pyspark.sql.functions import year, month, col,avg
 
 # Removing hard coded password - using os module to import them
 import os
 import sys
 
 #defining file to save answer
-queryAnswerFile = "s3a://vbengaluruprabhudev/VBP-part-four-answers-parquet"
+#queryAnswerFile = "s3a://vbengaluruprabhudev/VBP-part-four-answers-parquet"
 
 # Required configuration to load S3/Minio access credentials securely - no hardcoding keys into code
 conf = SparkConf()
@@ -28,7 +28,7 @@ conf.set("fs.s3a.path.style.access", "true")
 conf.set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
 conf.set("fs.s3a.connection.ssl.enabled", "false")
 
-spark = SparkSession.builder.appName("VBP Part four").config('spark.driver.host','spark-edge-vm0.service.consul').config(conf=conf).getOrCreate()
+spark = SparkSession.builder.appName("VBP-part-four").config('spark.driver.host','spark-edge-vm0.service.consul').config(conf=conf).getOrCreate()
 
 structSchema = StructType([StructField('WeatherStation', StringType(), True),
 StructField('WBAN', StringType(), True),
@@ -50,20 +50,20 @@ StructField('DPQualityCode', IntegerType(), True),
 StructField('AtmosphericPressure', FloatType(), True),
 StructField('APQualityCode', IntegerType(), True)])
 
-
 parquetdf = spark.read.parquet("s3a://vbengaluruprabhudev/50-parquet", header=True, schema=structSchema)   
 parquetdf.createOrReplaceTempView("weather")
 
+
 #Count the number of records
-countOfRecords = spark.sql(""" SELECT year(ObservationDate) As Year, count(*)
+countOfRecords = spark.sql(""" SELECT year(ObservationDate) As Year, count(*) As NoOfRecords
                                     FROM weather
                                     WHERE Month(ObservationDate) = '2'
                                     group by Year
                                     order by Year desc;
                                  """
-                                ).show(100)
+                                )
+countOfRecords.show(20)
 
-        
 #Average air temperature for month of February
 averageAirTemp = spark.sql("""  SELECT year(ObservationDate) As Year, AVG(AirTemperature) AS AvgAirTemperature
                                 FROM weather
@@ -72,7 +72,8 @@ averageAirTemp = spark.sql("""  SELECT year(ObservationDate) As Year, AVG(AirTem
                                 group by Year
                                 order by Year desc;
                                 """
-                                ).show(100)
+                                )
+averageAirTemp.show(20)
 
                                    
 #Median air temperature for month of February
@@ -87,44 +88,15 @@ standardAirTemp = spark.sql(""" SELECT year(ObservationDate) As Year, std(AirTem
                                     group by Year
                                     order by Year desc;
                                  """
-                                ).show(100)
+                                )
+standardAirTemp.show(20)
 
-#The weather station ID that has the lowest recorded temperature per year
-lowestTempRecorded = spark.sql(""" 
-                            SELECT WeatherStation, Year, min_temp
-                            FROM(
-                            SELECT
-                            DISTINCT (WeatherStation),
-                            YEAR(ObservationDate) AS Year, 
-                            MIN(AirTemperature) OVER (partition by YEAR(ObservationDate)) AS min_temp,
-                            ROW_NUMBER() OVER (partition by YEAR(ObservationDate) ORDER BY AirTemperature DESC) AS row_number
-                            FROM weather
-                            WHERE AirTemperature < 999 AND AirTemperature > -999
-                            group by AirTemperature, WeatherStation, Year
-                            order by min_temp, row_number asc)
-                            WHERE row_number = 1
-                            ORDER BY Year;
-                            """
-                            ).show(20)
+#Find AVG air temperature per StationID in the month of February
 
-#The weather station ID that has the highest recorded temperature per year
+stationIdFeb = parquetdf.filter(month("ObservationDate") == 2)
+averageTemperature = stationIdFeb.groupBy("WeatherStation").agg(avg("AirTemperature").alias("AverageTemperature"))
 
-highestTempRecorded = spark.sql("""
-                            SELECT WeatherStation, Year, max_temp
-                            FROM(
-                            SELECT
-                            DISTINCT (WeatherStation),
-                            YEAR(ObservationDate) AS Year, 
-                            MAX(AirTemperature) OVER (partition by YEAR(ObservationDate)) AS max_temp,
-                            ROW_NUMBER() OVER (partition by YEAR(ObservationDate) ORDER BY AirTemperature ASC) AS row_number
-                            FROM weather
-                            WHERE AirTemperature < 999 AND AirTemperature > -999
-                            group by AirTemperature, WeatherStation, Year
-                            order by max_temp, row_number asc)
-                            WHERE row_number = 1
-                            ORDER BY Year;
-                            """
-                            ).show(20)
+averageTemperature.show(20)
 
 #Removing illegal values form AirTemperature
 removeIllegalValues = spark.sql("""
@@ -135,47 +107,14 @@ removeIllegalValues = spark.sql("""
                                 """).show(20)
 
 
-querySchema7 = StructType([
-    StructField('MaxWeatherStation', StringType(), True),
-    StructField('ObservationDate', DateType(), True),
-    StructField('MaxAirTemperature', FloatType(), True)
-])
-removeIllegalValues.write.format('parquet').mode('overwrite').save(queryAnswerFile,schema=querySchema7)
+countOfRecords.write.format("parquet").mode("overwrite").parquet("s3a://vbengaluruprabhudev/VBP-part-four-answers-count-parquet")
 
+averageAirTemp.write.format("parquet").mode("overwrite").parquet("s3a://vbengaluruprabhudev/VBP-part-four-answers-avg-parquet")
 
-querySchema6 = StructType([
-    StructField('WeatherStation', StringType(), True),
-    StructField('Year', DateType(), True),
-    StructField('max_temp', FloatType(), True)
-])
+standardAirTemp.write.format("parquet").mode("overwrite").parquet("s3a://vbengaluruprabhudev/VBP-part-four-answers-std-parquet")
 
-highestTempRecorded.write.format('parquet').mode('append').save(queryAnswerFile,schema=querySchema6)
+averageTemperature.write.format("parquet").mode("overwrite").parquet("s3a://vbengaluruprabhudev/VBP-part-four-answers-station-parquet")
 
-querySchema5 = StructType([
-    StructField('WeatherStation', StringType(), True),
-    StructField('Year', DateType(), True),
-    StructField('min_temp', FloatType(), True)
-])
+#medianAirTemp.write.format("parquet").mode("overwrite").parquet("s3a://vbengaluruprabhudev/VBP-part-four-median-air-temp")
 
-lowestTempRecorded.write.format('parquet').mode('append').save(queryAnswerFile,schema=querySchema5)
-
-querySchema4 = StructType([
-    StructField('Year', DateType(), True),
-    StructField('Standard_deviation', FloatType(), True)
-])
-
-standardAirTemp.write.format('parquet').mode('append').save(queryAnswerFile,schema=querySchema4)
-
-querySchema3 = StructType([
-   StructField('Year', DateType(), True),
-   StructField('Standard_deviation', FloatType(), True)
-])
-
-averageAirTemp.write.format('parquet').mode('append').save(queryAnswerFile,schema=querySchema3)
-
-querySchema2=StructType([
-StructField('Year', DateType(), True),
-StructField('Count(1)', IntegerType(), True),
-])
-
-countOfRecords.write.format('parquet').mode('append').save(queryAnswerFile,schema=querySchema2)
+removeIllegalValues.write.format("parquet").mode("overwrite").parquet("s3a://vbengaluruprabhudev/VBP-part-four-remove-invalid-values")
