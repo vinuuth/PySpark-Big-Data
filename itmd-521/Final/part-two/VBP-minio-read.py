@@ -89,9 +89,7 @@ read_df.write.format("jdbc").option("url","jdbc:mysql://database-240-vm0.service
 
 jdbcDF = read_df.read.format("jdbc").option("url","jdbc:mysql://database-240-vm0.service.consul:3306/ncdc").option("driver","com.mysql.cj.jdbc.Driver").option("dbtable","VBP-thirties").option("user",os.getenv("MYSQLUSER")).option("truncate",True).mode("overwrite").option("password", os.getenv("MYSQLPASS")).load()
 
-jdbcDF.show()
-
-<<<<<<< HEAD
+jdbcDF.show(10)
 
 print(jdbcDF.schema)
 querySchema4 = StructType([
@@ -115,6 +113,5 @@ StructField('Count(1)', IntegerType(), True),
 
 countOfRecords.write.format('parquet').mode('append').save(queryAnswerFile,schema=querySchema2)
 
-=======
 print(jdbcDF.schema)
->>>>>>> 791613cbbe1b089fe5ffe190b8369b0d2a1e934f
+
