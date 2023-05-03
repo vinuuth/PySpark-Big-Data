@@ -13,9 +13,6 @@ from pyspark.sql.functions import year, month, col,avg
 import os
 import sys
 
-#defining file to save answer
-#queryAnswerFile = "s3a://vbengaluruprabhudev/VBP-part-four-answers-parquet"
-
 # Required configuration to load S3/Minio access credentials securely - no hardcoding keys into code
 conf = SparkConf()
 conf.set('spark.jars.packages', 'org.apache.hadoop:hadoop-aws:3.2.3')
@@ -28,7 +25,7 @@ conf.set("fs.s3a.path.style.access", "true")
 conf.set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
 conf.set("fs.s3a.connection.ssl.enabled", "false")
 
-spark = SparkSession.builder.appName("VBP-part-four").config('spark.driver.host','spark-edge-vm0.service.consul').config(conf=conf).getOrCreate()
+spark = SparkSession.builder.appName("VBP- part-four").config('spark.driver.host','spark-edge-vm0.service.consul').config(conf=conf).getOrCreate()
 
 structSchema = StructType([StructField('WeatherStation', StringType(), True),
 StructField('WBAN', StringType(), True),
@@ -55,17 +52,17 @@ parquetdf.createOrReplaceTempView("weather")
 
 
 #Count the number of records
-countOfRecords = spark.sql(""" SELECT year(ObservationDate) As Year, count(*) As NoOfRecords
+cntOfRecords = spark.sql(""" SELECT year(ObservationDate) As Year, count(*) As NoOfRecords
                                     FROM weather
                                     WHERE Month(ObservationDate) = '2'
                                     group by Year
                                     order by Year desc;
                                  """
                                 )
-countOfRecords.show(20)
+cntOfRecords.show(20)
 
 #Average air temperature for month of February
-averageAirTemp = spark.sql("""  SELECT year(ObservationDate) As Year, AVG(AirTemperature) AS AvgAirTemperature
+avgAirTemp = spark.sql("""  SELECT year(ObservationDate) As Year, AVG(AirTemperature) AS AvgAirTemperature
                                 FROM weather
                                 WHERE Month(ObservationDate) = '2'
                                 AND AirTemperature < 999 AND AirTemperature > -999
@@ -73,7 +70,7 @@ averageAirTemp = spark.sql("""  SELECT year(ObservationDate) As Year, AVG(AirTem
                                 order by Year desc;
                                 """
                                 )
-averageAirTemp.show(20)
+avgAirTemp.show(20)
 
                                    
 #Median air temperature for month of February
@@ -81,7 +78,7 @@ medianAirTemp = parquetdf.approxQuantile('AirTemperature', [0.5], 0.25)
 print(f"Median air temmp:{medianAirTemp}")
 
 #Standard Deviation of air temperature for month of February
-standardAirTemp = spark.sql(""" SELECT year(ObservationDate) As Year, std(AirTemperature) as Standard_deviation
+stdAirTemp = spark.sql(""" SELECT year(ObservationDate) As Year, std(AirTemperature) as Standard_deviation
                                     FROM weather
                                     WHERE Month(ObservationDate) = '2'
                                     AND AirTemperature < 999 AND AirTemperature > -999
@@ -89,14 +86,14 @@ standardAirTemp = spark.sql(""" SELECT year(ObservationDate) As Year, std(AirTem
                                     order by Year desc;
                                  """
                                 )
-standardAirTemp.show(20)
+stdAirTemp.show(20)
 
 #Find AVG air temperature per StationID in the month of February
 
 stationIdFeb = parquetdf.filter(month("ObservationDate") == 2)
-averageTemperature = stationIdFeb.groupBy("WeatherStation").agg(avg("AirTemperature").alias("AverageTemperature"))
+avgTemperature = stationIdFeb.groupBy("WeatherStation").agg(avg("AirTemperature").alias("AverageTemperature"))
 
-averageTemperature.show(20)
+avgTemperature.show(20)
 
 #Removing illegal values form AirTemperature
 removeIllegalValues = spark.sql("""
@@ -107,14 +104,11 @@ removeIllegalValues = spark.sql("""
                                 """).show(20)
 
 
-countOfRecords.write.format("parquet").mode("overwrite").parquet("s3a://vbengaluruprabhudev/VBP-part-four-answers-count-parquet")
+cntOfRecords.write.format("parquet").mode("overwrite").parquet("s3a://vbengaluruprabhudev/VBP-part-four-answers-count-parquet")
 
-averageAirTemp.write.format("parquet").mode("overwrite").parquet("s3a://vbengaluruprabhudev/VBP-part-four-answers-avg-parquet")
+avgAirTemp.write.format("parquet").mode("overwrite").parquet("s3a://vbengaluruprabhudev/VBP-part-four-answers-avg-parquet")
 
-standardAirTemp.write.format("parquet").mode("overwrite").parquet("s3a://vbengaluruprabhudev/VBP-part-four-answers-std-parquet")
+stdAirTemp.write.format("parquet").mode("overwrite").parquet("s3a://vbengaluruprabhudev/VBP-part-four-answers-std-parquet")
 
-averageTemperature.write.format("parquet").mode("overwrite").parquet("s3a://vbengaluruprabhudev/VBP-part-four-answers-station-parquet")
+avgTemperature.write.format("parquet").mode("overwrite").parquet("s3a://vbengaluruprabhudev/VBP-part-four-answers-station-parquet")
 
-#medianAirTemp.write.format("parquet").mode("overwrite").parquet("s3a://vbengaluruprabhudev/VBP-part-four-median-air-temp")
-
-removeIllegalValues.write.format("parquet").mode("overwrite").parquet("s3a://vbengaluruprabhudev/VBP-part-four-remove-invalid-values")
