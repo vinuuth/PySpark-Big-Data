@@ -41,7 +41,7 @@ StructField('DPQualityCode', IntegerType(), True),
 StructField('AtmosphericPressure', FloatType(), True),
 StructField('APQualityCode', IntegerType(), True)])
  
-spark_session = SparkSession.builder.appName("VBP-minio-read-part2").config('spark.driver.host','spark-edge-vm0.service.consul').config(conf=conf).getOrCreate()
+spark_session = SparkSession.builder.appName("VBP-minio-read2").config('spark.driver.host','spark-edge-vm0.service.consul').config(conf=conf).getOrCreate()
  
 #Read partitioned csv
 cachedf = spark_session.read.csv("s3a://vbengaluruprabhudev/30-csv", header=True, schema=schema)
@@ -54,7 +54,7 @@ csvdf.printSchema()
 csvdf.show(10)
  
 print("-------------------- Writing CSV to JSON ----------------------------")
-cachedf.write.format("json").option("header", "true").mode("overwrite").save("s3a://vbengalururprabhudev/30-part-two-json")
+cachedf.write.format("json").option("header", "true").mode("overwrite").save("s3a://vbengaluruprabhudev/30-part-two-json")
 jsondf = spark_session.read.schema(schema).json("s3a://vbengaluruprabhudev/30-part-two-json")
 #Printschema of JSON
 print("Print JSON Schema")
@@ -75,7 +75,7 @@ parquetdf.show(10)
 
 #----------------MariaDB part---------------------------------------
 
-mariaDBdf = spark_session.read.csv("s3a://vbengaluruprabhudev/30-csv")
+mariaDBdf = spark_session.read.csv("s3a://vbengaluruprabhudev/30-part-two-parquet")
 
 
 #loading parrquet dataframe to Maria DB
