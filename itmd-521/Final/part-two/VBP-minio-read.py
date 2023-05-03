@@ -44,17 +44,17 @@ StructField('APQualityCode', IntegerType(), True)])
 spark_session = SparkSession.builder.appName("VBP-minio-read2").config('spark.driver.host','spark-edge-vm0.service.consul').config(conf=conf).getOrCreate()
  
 #Read partitioned csv
-cachedf = spark_session.read.csv("s3a://vbengaluruprabhudev/30-csv", header=True, schema=schema)
+cacdf = spark_session.read.csv("s3a://vbengaluruprabhudev/30-csv", header=True, schema=schema)
  
 
-csvdf = cachedf
+csvdf = cacdf
 #Printschema
 csvdf.printSchema()
 #Displayschema
 csvdf.show(10)
  
-print("-------------------- Writing CSV to JSON ----------------------------")
-cachedf.write.format("json").option("header", "true").mode("overwrite").save("s3a://vbengaluruprabhudev/30-part-two-json")
+print("Written from CSV to JSON")
+cacdf.write.format("json").option("header", "true").mode("overwrite").save("s3a://vbengaluruprabhudev/30-part-two-json")
 jsondf = spark_session.read.schema(schema).json("s3a://vbengaluruprabhudev/30-part-two-json")
 #Printschema of JSON
 print("Print JSON Schema")
@@ -63,8 +63,8 @@ jsondf.printSchema()
 print("Display JSONDF")
 jsondf.show(10)
  
-print("---------------Writing CSV to PARQUET ----------------------")
-cachedf.write.format("parquet").option("header", "true").mode("overwrite").save("s3a://vbengaluruprabhudev/30-part-two-parquet")
+print("written from CSV to parquet")
+cacdf.write.format("parquet").option("header", "true").mode("overwrite").save("s3a://vbengaluruprabhudev/30-part-two-parquet")
 parquetdf = spark_session.read.schema(schema).parquet("s3a://vbengaluruprabhudev/30-part-two-parquet")
 #Printschema of Parquet
 print("Print PARQUET Schema")
@@ -75,14 +75,16 @@ parquetdf.show(10)
 
 #----------------MariaDB part---------------------------------------
 
-mariaDBdf = spark_session.read.csv("s3a://vbengaluruprabhudev/30-part-two-parquet")
+#cacdf = spark_session.read.csv("s3a://vbengaluruprabhudev/30-csv", header=True, schema=schema)
 
 
-#loading parrquet dataframe to Maria DB
-(mariaDBdf.write.format("jdbc").option("url","jdbc:mysql://database-240-vm0.service.consul:3306/ncdc").option("driver","com.mysql.cj.jdbc.Driver").option("dbtable","VBP_thirty").option("user",os.getenv('MYSQL_USER')).option("truncate",True).mode("overwrite").option("password", os.getenv('MYSQL_PASS')).save())
+#loading csv dataframe to Maria DB
+(cacdf.write.format("jdbc").option("url","jdbc:mysql://database-240-vm0.service.consul:3306/ncdc").option("driver","com.mysql.cj.jdbc.Driver").option("dbtable","VBP_thirty").option("user",os.getenv('MYSQL_USER')).option("truncate",True).mode("overwrite").option("password", os.getenv('MYSQL_PASS')).save())
 
 
-df1=(spark_session.read.format("jdbc").option("url","jdbc:mysql://database-240-vm0.service.consul:3306/ncdc").option("driver","com.mysql.cj.jdbc.Driver").option("dbtable","VBP_thirty").option("user",os.getenv('MYSQL_USER')).option("truncate",True).option("password", os.getenv('MYSQL_PASS')).load())
-print("-----------------------Reading the wriiten data on database and printing------------------------")
-df1.show(10)
-df1.printSchema()
+df=(spark_session.read.format("jdbc").option("url","jdbc:mysql://database-240-vm0.service.consul:3306/ncdc").option("driver","com.mysql.cj.jdbc.Driver").option("dbtable","VBP_thirty").option("user",os.getenv('MYSQL_USER')).option("truncate",True).option("password", os.getenv('MYSQL_PASS')).load())
+print("-records are fetched-")
+df.show(10)
+df.printSchema()
+
+
