@@ -54,7 +54,7 @@ csvdf.printSchema()
 csvdf.show(10)
  
 print("-------------------- Writing CSV to JSON ----------------------------")
-cachedf.write.format("json").option("header", "true").mode("overwrite").save("s3a://mwaghela/30-part-two-json")
+cachedf.write.format("json").option("header", "true").mode("overwrite").save("s3a://vbengalururprabhudev/30-part-two-json")
 jsondf = spark_session.read.schema(schema).json("s3a://vbengaluruprabhudev/30-part-two-json")
 #Printschema of JSON
 print("Print JSON Schema")
@@ -64,7 +64,7 @@ print("Display JSONDF")
 jsondf.show(10)
  
 print("---------------Writing CSV to PARQUET ----------------------")
-cachedf.write.format("parquet").option("header", "true").mode("overwrite").save("s3a://mwaghela/30-part-two-parquet")
+cachedf.write.format("parquet").option("header", "true").mode("overwrite").save("s3a://vbengaluruprabhudev/30-part-two-parquet")
 parquetdf = spark_session.read.schema(schema).parquet("s3a://vbengaluruprabhudev/30-part-two-parquet")
 #Printschema of Parquet
 print("Print PARQUET Schema")
