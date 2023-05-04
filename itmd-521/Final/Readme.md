@@ -6,7 +6,7 @@ This will be the description and deliverable for the final project for ITMD 521
 
 * All commits and code must be placed in the private repo assigned at the beginning of the semester
   * Under the folder: `itmd-521` > `final`
-  * Include a **Readme.md** file in the `final` directory with instructions and commands to run each of your scripts
+  * Include a *Readme.md* file in the `final` directory with instructions and commands to run each of your scripts
   * Create a sub-folder: `part-one`, `part-two`, `part-three`
   * In each sub-folder provide the PySpark `.py` files to accomplish the requirements
   * I will run this to check your work and compare output
@@ -28,7 +28,7 @@ The first part of the assignment you will be data engineering. You will be conve
 
 * Use the raw data set you were assigned
 * Use these initial parametersfor each job:
-  * ``` --driver-memory 6G --executor-memory 6G --executor-cores 2 --num-executors 12 --total-executor-cores 24```
+  *  --driver-memory 6G --executor-memory 6G --executor-cores 2 --num-executors 12 --total-executor-cores 24
 
 * Create a PySpark application that will read the `30.txt` from the `itmd521` bucket into a DataFrame
   * Name the PySpark application `XYZ-minio-read-and-process-AA.py`
@@ -40,6 +40,16 @@ The first part of the assignment you will be data engineering. You will be conve
   * csv with lz4 compression
   * parquet
   * csv with a single partition (need to adjust filename to not overwrite the first csv requirement)
+
+Steps to execute Part One
+
+ - Login into spark server using credentials: `ssh -i C:\Users\vinut\.ssh\id_ed25519_spark_edge_key vbengaluruprabhudev@system45.rice.iit.edu `
+      - Navigate to the folder `/home/vbengaluruprabhudev/vbengaluruprabhudev/itmd-521/Final/part-one`
+      - Run below three commands for converting the file to cvs, json, and parquet files
+
+Command do execute:
+`spark-submit --master spark://sm.service.consul:7077 --packages "org.apache.hadoop:hadoop-aws:3.2.3,com.mysql:mysql-connector-j:8.0.32" --executor-memory 4g --executor-cores 1 --num-executors 12 --total-executor-cores 24 --driver-memory 6g --proxy-user controller VBP-minio-read-and-process-30.py`
+
 
 #### Second Section
 
@@ -55,6 +65,12 @@ You will continue your data engineering experience in needing to read Raw text f
   * 20-parquet
 
 As a hint - do a test run on a small dataset - say 20.txt to see if your logic and bucket permissions are working before starting the larger jobs.
+
+Command to execute minio-read-40.py : `spark-submit --master spark://sm.service.consul:7077 --packages "org.apache.hadoop:hadoop-aws:3.2.3,com.mysql:mysql-connector-j:8.0.32" --executor-memory 4g --executor-cores 1 --num-executors 12 --total-executor-cores 24 --driver-memory 6g --proxy-user controller VBP-minio-read-and-process-40.py`
+
+Command to execute minio-read-70.py : ` spark-submit --master spark://sm.service.consul:7077 --packages "org.apache.hadoop:hadoop-aws:3.2.3,com.mysql:mysql-connector-j:8.0.32" --executor-memory 4g --executor-cores 1 --num-executors 12 --total-executor-cores 24 --driver-memory 6g --proxy-user controller VBP-minio-read-and-process-70.py`
+
+Command to execute minio-read-90.py : `spark-submit --master spark://sm.service.consul:7077 --packages "org.apache.hadoop:hadoop-aws:3.2.3,com.mysql:mysql-connector-j:8.0.32" --executor-memory 4g --executor-cores 1 --num-executors 12 --total-executor-cores 24 --driver-memory 6g --proxy-user controller VBP-minio-read-and-process-90.py`
 
 ### Part Two
 
@@ -75,17 +91,22 @@ This part you will read the datasets you created back into your PySpark applicat
   * Show the first 10 records and print the schema
   * Username and Password will be provided to you
 
-```python
+python
 # Writing out to MySQL your DataFrame results
 # https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrameWriter.save.html
 (splitDF.write.format("jdbc").option("url","jdbc:mysql://database-240-vm0.service.consul:3306/ncdc").option("driver","com.mysql.cj.jdbc.Driver").option("dbtable","thirty").option("user",os.getenv('MYSQLUSER')).option("truncate",True).mode("overwrite").option("password", os.getenv('MYSQLPASS')).save())
-```
+
+
+
+Command to execute Part Two: nohup spark-submit --master spark://sm.service.consul:7077 --packages "org.apache.hadoop:hadoop-aws:3.2.3,com.mysql:mysql-connector-j:8.0.32" --executor-memory 4g --executor-cores 1 --num-executors 12 --total-executor-cores 24 --driver-memory 6g --proxy-user controller VBP-minio-read.py > ./output-2latest-new &
+
+
 
 ### Part-Three
 
-In this section you will execute the same command 3 times and modify run time parameters and make note of the execution times and **explain** what the adjustments did. To do this create a PySpark application to read your prescribed decade .parquet file data and find all of the weather station IDs that have registered days (count) of visibility less than 200 per year.
+In this section you will execute the same command 3 times and modify run time parameters and make note of the execution times and *explain* what the adjustments did. To do this create a PySpark application to read your prescribed decade .parquet file data and find all of the weather station IDs that have registered days (count) of visibility less than 200 per year.
 
-Create a file named: `part-three-answer.md` and Using Markdown explain your answer in technical detail from the book. Note - relative statements: *its faster, its better, its slower* are not correct.
+Create a file named: `part-three-answer.md` and Using Markdown explain your answer in technical detail from the book. Note - relative statements: its faster, its better, its slower are not correct.
 
 Using these parameters on a reading 50-parquet from your Minio bucket
 
@@ -98,14 +119,27 @@ Using these parameters on a reading 50-parquet from your Minio bucket
   * `--driver-memory 2G --executor-memory 4G --executor-cores 1 --total-executor-cores 20`
   * Your Expectation:
   * Your results/runtime:
+
+
+Command to execute: `nohup spark-submit --master spark://sm.service.consul:7077 --packages "org.apache.hadoop:hadoop-aws:3.2.3,com.mysql:mysql-connector-j:8.0.32" --executor-memory 4g --executor-cores 1 --num-executors 20 --total-executor-cores 20 --driver-memory 2g --proxy-user controller VBP-minio-part-three.py > ./Run_first.out &`
+
 * Second run
   * `--driver-memory 10G --executor-memory 12G --executor-cores 2`
   * Your Expectation:
   * Your results/runtime:
+
+
+Command to execute: `nohup spark-submit --master spark://sm.service.consul:7077 --packages "org.apache.hadoop:hadoop-aws:3.2.3,com.mysql:mysql-connector-j:8.0.32" --driver-memory 10G --executor-memory 12G --executor-cores 2  --proxy-user controller VBP-minio-part-three.py > ./Run_second.out &`
+
 * Third run
   * `--driver-memory 4G --executor-memory 4G --executor-cores 2 --total-executor-cores 40`
   * Your Expectation:
   * Your results/runtime:
+
+
+Coomand to execute: `nohup spark-submit --master spark://sm.service.consul:7077 --packages "org.apache.hadoop:hadoop-aws:3.2.3,com.mysql:mysql-connector-j:8.0.32" --executor-memory 4g --executor-cores 2 --num-executors 20 --total-executor-cores 40 --driver-memory 4g --proxy-user controller VBP-minio-part-three.py.py > ./Third_Run.out &`
+
+  
 
 ### Part Four
 
@@ -123,13 +157,19 @@ This part you will do some basic analytics using the Spark SQL or the native PyS
     * Will have to construct a schema
     * May want to make use of temp tables to keep smaller sets of data in memory
 
+
+Coomand to execute: 
+`nohup spark-submit --master spark://sm.service.consul:7077 --packages "org.apache.hadoop:hadoop-aws:3.2.3,com.mysql:mysql-connector-j:8.0.32" --executor-memory 4g --executor-cores 2 --num-executors 20 --total-executor-cores 40 --driver-memory 4g --proxy-user controller VBP-part-four-file.py > ./output-2latest-new &`
+
+
+
 ### Final Note
 
-These jobs might take a while to process, potentially hours--**Don't wait!**.  You can execute jobs and add them to the queue -- when resources free up, your job will execute.  You can submit a job to execute without having to keep your computer open all the time by using the `nohup` command, put `nohup` in front of your command and a `&` at the end will background and allow you to disconnect from the spark edge server (not hang up). 
+These jobs might take a while to process, potentially hours--*Don't wait!*.  You can execute jobs and add them to the queue -- when resources free up, your job will execute.  You can submit a job to execute without having to keep your computer open all the time by using the `nohup` command, put `nohup` in front of your command and a `&` at the end will background and allow you to disconnect from the spark edge server (not hang up). 
 
 Example: 
 
-```nohup spark-submit --master spark://192.168.172.23:7077 --packages "org.apache.hadoop:hadoop-aws:3.2.2" --driver-memory 2G --executor-memory 4G --executor-cores 1 ncdc-single-partition-csv.py 50.txt 50.csv csv &```
+nohup spark-submit --master spark://192.168.172.23:7077 --packages "org.apache.hadoop:hadoop-aws:3.2.2" --driver-memory 2G --executor-memory 4G --executor-cores 1 ncdc-single-partition-csv.py 50.txt 50.csv csv &
 
 ## Due Date and Finals Presentation
 
