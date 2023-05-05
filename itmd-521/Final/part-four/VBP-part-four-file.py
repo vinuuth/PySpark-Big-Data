@@ -76,6 +76,7 @@ avgAirTemp.show(20)
 #Median air temperature for month of February
 mediAirTemp = parquetdf.approxQuantile('AirTemperature', [0.5], 0.25)
 print(f"Median air temmp:{mediAirTemp}")
+mediAirTemp.show(20)
 
 #Standard Deviation of air temperature for month of February
 stdAirTemp = spark.sql(""" SELECT year(ObservationDate) As Year, std(AirTemperature) as Standard_deviation
