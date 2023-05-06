@@ -159,7 +159,7 @@ This part you will do some basic analytics using the Spark SQL or the native PyS
 
 
 Coomand to execute: 
-`nohup spark-submit --master spark://sm.service.consul:7077 --packages "org.apache.hadoop:hadoop-aws:3.2.3,com.mysql:mysql-connector-j:8.0.32" --executor-memory 4g --executor-cores 2 --num-executors 20 --total-executor-cores 40 --driver-memory 4g --proxy-user controller VBP-part-four-file.py > ./output-2latest-new &`
+`nohup spark-submit --master spark://sm.service.consul:7077 --packages "org.apache.hadoop:hadoop-aws:3.2.3,com.mysql:mysql-connector-j:8.0.32" --executor-memory 4g --executor-cores 2 --num-executors 20 --total-executor-cores 40 --driver-memory 4g --proxy-user controller VBP-part-four-file.py > ./output-finalpart4 &`
 
 
 
