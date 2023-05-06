@@ -98,7 +98,7 @@ python
 
 
 
-Command to execute Part Two: `nohup spark-submit --master spark://sm.service.consul:7077 --packages "org.apache.hadoop:hadoop-aws:3.2.3,com.mysql:mysql-connector-j:8.0.32" --executor-memory 4g --executor-cores 2 --total-executor-cores 24 --driver-memory 8g --proxy-user controller mariadb.py> ./output-mariadbnewfinal &`
+Command to execute Part Two: `nohup spark-submit --master spark://sm.service.consul:7077 --packages "org.apache.hadoop:hadoop-aws:3.2.3,com.mysql:mysql-connector-j:8.0.32" --executor-memory 4g --executor-cores 2 --total-executor-cores 24 --driver-memory 8g --proxy-user controller VBP-minio-read.py> ./full-mariadbnewfinal &`
 
 
 
