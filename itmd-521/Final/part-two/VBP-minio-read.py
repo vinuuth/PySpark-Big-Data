@@ -75,16 +75,16 @@ parquetdf.show(10)
 
 #----------------MariaDB part---------------------------------------
 
-#cacdf = spark_session.read.csv("s3a://vbengaluruprabhudev/30-csv", header=True, schema=schema)
+Maria_df = spark_session.read.csv("s3a://vbengaluruprabhudev/30-csv", header=True, schema=schema)
 
+# Writing out to MySQL your DataFrame results
+# https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrameWriter.save.html
 
-#loading csv dataframe to Maria DB
-(cacdf.write.format("jdbc").option("url","jdbc:mysql://database-240-vm0.service.consul:3306/ncdc").option("driver","com.mysql.cj.jdbc.Driver").option("dbtable","VBP_thirty").option("user",os.getenv('MYSQL_USER')).option("truncate",True).mode("overwrite").option("password", os.getenv('MYSQL_PASS')).save())
+Maria_df.write.format("jdbc").option("url","jdbc:mysql://database-240-vm0.service.consul:3306/ncdc").option("driver","com.mysql.cj.jdbc.Driver").option("dbtable","VBP_thirty").option("user",os.getenv('MYSQLUSER')).option("truncate",True).mode("overwrite").option("password",os.getenv('MYSQLPASS')).save()
 
+DF = spark_session.read.format("jdbc").option("url","jdbc:mysql://database-240-vm0.service.consul:3306/ncdc").option("driver","com.mysql.cj.jdbc.Driver").option("dbtable","VBP_thirty").option("user",os.getenv('MYSQLUSER')).option("password", os.getenv('MYSQLPASS')).load()
 
-df=(spark_session.read.format("jdbc").option("url","jdbc:mysql://database-240-vm0.service.consul:3306/ncdc").option("driver","com.mysql.cj.jdbc.Driver").option("dbtable","VBP_thirty").option("user",os.getenv('MYSQL_USER')).option("truncate",True).option("password", os.getenv('MYSQL_PASS')).load())
-print("-records are fetched-")
-df.show(10)
-df.printSchema()
+DF.show(10)
+DF.printSchema()
 
 
