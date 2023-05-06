@@ -98,7 +98,7 @@ python
 
 
 
-Command to execute Part Two: nohup spark-submit --master spark://sm.service.consul:7077 --packages "org.apache.hadoop:hadoop-aws:3.2.3,com.mysql:mysql-connector-j:8.0.32" --executor-memory 4g --executor-cores 1 --num-executors 12 --total-executor-cores 24 --driver-memory 6g --proxy-user controller VBP-minio-read.py > ./output-2latest-new &
+Command to execute Part Two: `nohup spark-submit --master spark://sm.service.consul:7077 --packages "org.apache.hadoop:hadoop-aws:3.2.3,com.mysql:mysql-connector-j:8.0.32" --executor-memory 4g --executor-cores 2 --total-executor-cores 24 --driver-memory 8g --proxy-user controller mariadb.py> ./output-mariadbnewfinal &`
 
 
 
@@ -137,7 +137,7 @@ Command to execute: `nohup spark-submit --master spark://sm.service.consul:7077 
   * Your results/runtime:
 
 
-Coomand to execute: `nohup spark-submit --master spark://sm.service.consul:7077 --packages "org.apache.hadoop:hadoop-aws:3.2.3,com.mysql:mysql-connector-j:8.0.32" --executor-memory 4g --executor-cores 2 --num-executors 20 --total-executor-cores 40 --driver-memory 4g --proxy-user controller VBP-minio-part-three.py.py > ./Third_Run.out &`
+Coomand to execute: `nohup spark-submit --master spark://sm.service.consul:7077 --packages "org.apache.hadoop:hadoop-aws:3.2.3,com.mysql:mysql-connector-j:8.0.32" --executor-memory 4g --executor-cores 2 --num-executors 20 --total-executor-cores 40 --driver-memory 4g --proxy-user controller VBP-minio-part-three.py > ./Third_Run.out &`
 
   
 
