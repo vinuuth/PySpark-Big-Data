@@ -71,13 +71,6 @@ avgAirTemp = spark.sql("""  SELECT year(ObservationDate) As Year, AVG(AirTempera
                                 """
                                 )
 avgAirTemp.show(20)
-
-                                   
-#Median air temperature for month of February
-mediAirTemp = parquetdf.approxQuantile('AirTemperature', [0.5], 0.25)
-print(f"Median air temmp:{mediAirTemp}")
-mediAirTemp.show(20)
-
 #Standard Deviation of air temperature for month of February
 stdAirTemp = spark.sql(""" SELECT year(ObservationDate) As Year, std(AirTemperature) as Standard_deviation
                                     FROM weather
@@ -96,6 +89,16 @@ avgTemperature = stationIdFeb.groupBy("WeatherStation").agg(avg("AirTemperature"
 
 avgTemperature.show(20)
 
+#Median air temperature for month of February
+#mediAirTemp = parquetdf.approxQuantile('AirTemperature', [0.5], 0.25)
+#print(f"Median air temmp:{mediAirTemp}")
+#mediAirTemp.show(20)
+# Calculate median air temperature
+median_temp = parquetdf.filter(month("ObservationDate") == 2) \
+                .groupBy(year("ObservationDate").alias("Year")) \
+                .agg(func.percentile_approx("AirTemperature",0.5).alias("Median_Air_Temp"))
+median_temp.show(10)
+
 #Removing illegal values form AirTemperature
 removeIllegalValues = spark.sql("""
                                 SELECT max(WeatherStation) as MaxWeatherStation, YEAR(ObservationDate) as ObservationDate , max(AirTemperature) MaxAirTemperature
@@ -113,5 +116,5 @@ stdAirTemp.write.format("parquet").mode("overwrite").parquet("s3a://vbengalurupr
 
 avgTemperature.write.format("parquet").mode("overwrite").parquet("s3a://vbengaluruprabhudev/VBP-part-four-answers-station-parquet")
 
-mediAirTemp.write.format("parquet").mode("overwrite").parquet("s3a://vbengaluruprabhudev/VBP-part-four-answers-median-parquet")
+median_temp.write.format("parquet").mode("overwrite").parquet("s3a://vbengaluruprabhudev/VBP-part-four-answers-median-parquet")
 
