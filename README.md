@@ -5,7 +5,7 @@
 ![travel](./Images/travel.jpg "travel")
 
 ## Where are you from?
-Currently living in Chicago, IL, USA. Native is India, (Karnataka state, Bengaluru city)
+Currently living in Chicago, IL, USA. 
 
 
 ## IT Interests
